@@ -1,0 +1,127 @@
+.signup-container{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.header-signup{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 60%;
+}
+
+.header-signup label{
+    color: #8a9dbe;
+    margin-right: 10px;
+}
+
+.header-signup a{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.logo-signup{
+    width: 40px;
+    height: auto;
+    border-radius: 50%;
+}
+
+.signup-container form{
+    width: 100%;
+    max-width: 350px;
+    background-color: #0C162D;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 60px 0px 0px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 3);
+}
+
+.signup-container p{
+    font-size: 16px;
+    color: #8193B2;
+    font-family: monospace;
+    margin-bottom: 32px;
+}
+
+.signup-container form label{
+    color: #00CFC8;
+    font-family: monospace;
+    font-size: 16px;
+}
+
+.signup-container .form-input{
+    display: flex;
+    align-items: center;
+}
+
+.signup-container input{
+    background-color: #0C162D;
+    width: 100%;
+    padding: 5px 12px;
+    margin: 4px 0px 16px;
+    border: 1px solid #4493F8;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #F0F6FC;
+    font-family: monospace;
+}
+
+.signup-container input:focus {
+    border: 1px solid #4493F8;
+    outline: none; 
+}
+
+.signup-container button{
+    width: 100%;
+    padding: 5px 16px;
+    margin: 10px 0px 4px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: monospace;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #0C162D;
+}
+
+.signup-container .btn-active{
+    color: #20BB3D;
+    border: 1px solid #20BB3D;
+}
+
+.signup-container .btn-disabled{
+    color: #627597;
+    border: 1px solid #627597;
+}
+
+.signup-container .error-message{
+    width: 100%;
+    max-width: 350px;
+    background-color: #0C162D;
+    border-radius: 8px;
+    padding: 24px 24px 14px 24px;
+    margin: 20px 0px 0px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 3);
+}
+
+.signup-container .error-message p:first-of-type{
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    color: #8193B2;
+    font-family: monospace;
+}
+
+.signup-container .error-message p:nth-of-type(n+2){
+    font-size: 16px;
+    margin: 0 0 10px;
+    padding: 0;
+    color: #8193B2;
+    font-family: monospace;
+}
