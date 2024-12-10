@@ -9,7 +9,7 @@ const Menu = ({user}) => {
     const [isGroupOpen, setIsGroupOpen] = useState(true);
     const menuItems = [
         { name: "Home", icon: "fas fa-home", path: "/my-home" },
-        { name: "My Task", icon: "fas fa-tasks", path: "/my-task" },
+        { name: "My Task", icon: "fas fa-tasks", path: "/my-task/board" },
         { name: "Notification", icon: "fas fa-inbox", path: "/my-notification" },
         { name: "Group", icon: "fas fa-plus", isGroup: true }
     ];

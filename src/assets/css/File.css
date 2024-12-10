@@ -1,0 +1,90 @@
+.container-file {
+    display: flex;
+    align-items: center;
+    padding: 30px 9%;
+    gap: 10px 2%;
+    flex-wrap: wrap;
+}
+
+.content-item-file {
+    display: flex;
+    align-items: center;
+    border: 0.3px solid #6c6f72;
+    background-color: #151B23;
+    border-radius: 5px;
+    gap: 20px;
+    padding: 10px 16px;
+    width: 26%;
+    cursor: pointer;
+}
+
+.content-item-file:hover {
+    border: 0.3px solid #A2A0A2;
+}
+
+.item-file-icon {
+    font-size: 36px;
+}
+
+.item-file-icon.pdf {
+    color: #b40202;
+}
+
+.item-file-icon.txt {
+    color: #007BFF;
+}
+
+.item-file-info {
+    display: flex;
+    flex-direction: column;
+    color: #F5F4F3;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    gap: 5px;
+}
+
+.item-file-bottom{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.item-file-type {
+    color: #A2A0A2;
+    font-size: 14px;
+}
+
+.item-file-space{
+    font-size: 8px;
+    color: #A2A0A2;
+}
+
+.item-file-upload{
+    font-size: 14px;
+    color: #A2A0A2;
+}
+
+.container-file-empty{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    word-break: normal;
+    padding: 30px 36px;
+    margin: 30px 36%;
+    border: 1px solid #6c6f72;
+    border-radius: 8px;
+}
+
+.container-file-empty img{
+    height: 100px;
+}
+
+.container-file-empty span{
+    color: #F5F4F3;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+}

@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "../assets/css/Home.css";
 import { useOutletContext } from "react-router-dom";
+import Option from "./Option";
 
 const Home = () => {
-    const {user} = useOutletContext();
+    const { user } = useOutletContext();
+    const [isOpenOption, setIsOpenOption] = useState(false);
+    const [selectedOption, setSelectedOption] = useState("Active");
+
+    const select = [
+        { name: "Active" },
+        { name: "Archive" }
+    ];
     const getCurrentTimeDetails = () => {
         const now = new Date();
         const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -31,6 +39,10 @@ const Home = () => {
     };
 
     const { fullDate, greeting } = getCurrentTimeDetails();
+
+    const handleOpenOption = () => {
+        setIsOpenOption(!isOpenOption);
+    }
 
     return (
         <div className="container-home">
@@ -66,8 +78,15 @@ const Home = () => {
                 </div>
                 <div className="project-content">
                     <div className="project-title">
-                        <span>Groups</span>
-                        <button><span>Active</span> <i className="fas fa-caret-down dropdown-icon"></i></button>
+                        <span className="project-title-name">Groups</span>
+                        <button onClick={handleOpenOption}><span>Active</span> <i className='dropdown-icon fas fa-caret-down'></i></button>
+                        {isOpenOption && (
+                            <Option
+                                list={select}
+                                selectedItem={selectedOption}
+                                setSelectedItem={setSelectedOption}
+                            />
+                        )}
                     </div>
                     <div className="project-grid">
                         <div className="project-item add-project">

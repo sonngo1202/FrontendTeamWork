@@ -99,7 +99,7 @@ function SignupPage(){
                         Hãy bắt đầu hành trình
                     </p>
                     <label>Email*</label>
-                    <FormInput type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <FormInput type='email' value={email} onChange={(e) => setEmail(e.target.value.toLowerCase())} required />
                     <label>Full name*</label>
                     <FormInput type='text' value={fullName} onChange={(e) => setfullName(e.target.value)} required />
                     <label>Job*</label>

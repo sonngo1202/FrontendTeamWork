@@ -51,7 +51,7 @@ function SigninPage({ setIsAuthenticated }){
                 )} 
                 <form onSubmit={handleLogin}>
                     <label>Email</label>
-                    <FormInput type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <FormInput type='email' value={email} onChange={(e) => setEmail(e.target.value.toLowerCase())} required />
                     <div className="lable-password">
                         <label>Password</label>
                         <Link to="/forgot-password">Quên mật khẩu?</Link>

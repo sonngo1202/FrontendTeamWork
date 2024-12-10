@@ -131,6 +131,7 @@
     margin-bottom: 10px;
     margin-left: 5%;
     margin-top: 20px;
+    position: relative;
 }
 
 .project-title button{
@@ -148,7 +149,7 @@
     margin-right: 0;
 }
 
-.project-title i{
+.dropdown-icon{
     color: #A2A0A2;
     margin-left: 0;
     font-size: 14px;
@@ -166,7 +167,7 @@
     color: #F0F6FC
 }
 
-.project-title span{
+.project-title-name{
     color: #F0F6FC;
     font-size: 24px;
     font-weight: bold;

@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import '../assets/css/Group.css';
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import Cookies from 'js-cookie';
 import { detail } from '../services/groupService'
 
 const Group = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const { user } = useOutletContext();
     const [group, setGroup] = useState(null);
     const basePath = location.pathname.match(/^\/group\/\d+/)?.[0];
     const groupId = basePath.match(/\/group\/(\d+)/)?.[1];
     const [selectedItem, setSelectedItem] = useState('');
+    const isBoardPage = location.pathname.includes('/board');
 
     const groupItems = [
         { name: "Overview", icon: "fas fa-clipboard-list", path: `/group/${groupId}/overview` },
@@ -27,6 +29,7 @@ const Group = () => {
 
     const handleSelectGroupClick = (item) => {
         setSelectedItem(item.name);
+        navigate(item.path);
     }
 
     useEffect(() => {
@@ -42,11 +45,15 @@ const Group = () => {
             }
         }
         fetchData()
+    }, [groupId]);
+
+    useEffect(() => {
         const activeItem = groupItems.find(item => location.pathname.includes(item.path));
         if (activeItem) {
             setSelectedItem(activeItem.name);
         }
-    }, [location])
+    }, [location]);
+    
     return (
         <div className="container-group">
             <div className="group-header">
@@ -65,15 +72,17 @@ const Group = () => {
                     )}
                 </div>
             </div>
-            <div className="group-filter">
-                {optionItems.map((item) =>
-                    <button key={item.name} >
-                        <i className={`fas ${item.icon}`}></i>
-                        <span>{item.name}</span>
-                    </button>
-                )}
-            </div>
-            <Outlet context={ {group} }/>
+            {isBoardPage && (
+                <div className="group-filter">
+                    {optionItems.map((item) =>
+                        <button key={item.name} >
+                            <i className={`fas ${item.icon}`}></i>
+                            <span>{item.name}</span>
+                        </button>
+                    )}
+                </div>
+            )}
+            <Outlet context={{ group, user }} />
         </div>
     );
 };

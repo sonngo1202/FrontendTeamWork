@@ -11,6 +11,11 @@ import MainPage from './pages/MainPage';
 import Home from './components/Home';
 import Group from './components/Group';
 import BoardGroup from './components/BoardGroup';
+import Overview from './components/Overview';
+import File from './components/File';
+import MyTask from './components/MyTask';
+import BoardMyTask from './components/BoardMyTask';
+import Notification from './components/Notification';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!Cookies.get('accessToken'));
@@ -37,9 +42,16 @@ function App() {
       <Route path="/" element={isAuthenticated ? <MainPage setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/sign-in" />}>
         <Route path="group/:id/" element={<Group />}>
           <Route path="board" element={<BoardGroup />} />
+          <Route path="board/:idWG/tasks/:idTask" element={<BoardGroup />} />
+          <Route path="overview" element={<Overview />} />
+          <Route path="file" element={<File />} />
         </Route>
         <Route path="my-home" element={<Home />} />
-      </Route>
+        <Route path='my-task/' element={<MyTask />} >
+          <Route path='board' element={<BoardMyTask />} />
+        </Route>
+        <Route path='my-notification' element={<Notification/>} />
+      </Route> 
     </Routes>
   );
 }

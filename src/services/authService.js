@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Cookies from 'js-cookie'; 
+import Cookies from 'js-cookie';
 
 export const detail = async (id, accessToken) => {
     try {
@@ -17,7 +17,7 @@ export const detail = async (id, accessToken) => {
                 throw new Error('Đã có lỗi xảy ra, vui lòng thử lại');
             }
         }
-        const data = await response.json(); 
+        const data = await response.json();
         return data;
     } catch (error) {
         throw new Error(error.message || 'Không thể kết nối với server');
@@ -32,12 +32,12 @@ export const signin = async (email, password) => {
         if (response.status === 200) {
             const { accessToken, refreshToken, ...userData } = response.data;
 
-            Cookies.set('accessToken', accessToken, { expires: 1 / 24 }); 
+            Cookies.set('accessToken', accessToken, { expires: 1 / 24 });
 
-            Cookies.set('refreshToken', refreshToken, { expires: 30 }); 
+            Cookies.set('refreshToken', refreshToken, { expires: 30 });
 
             Cookies.set('user', JSON.stringify(userData), { expires: 7 });
-            return response.data; 
+            return response.data;
         }
     } catch (error) {
         if (error.response) {
@@ -62,7 +62,7 @@ export const signup = async (email, password, fullName, job, location) => {
             location
         });
 
-        if (response.status === 200) { 
+        if (response.status === 200) {
             return true;
         }
     } catch (error) {
@@ -79,10 +79,10 @@ export const signup = async (email, password, fullName, job, location) => {
 };
 
 export const resendCode = async (email) => {
-    try{
+    try {
         const response = await axios.post('http://localhost:8080/api/datn/auth/re-code', { email });
         return response.data;
-    }catch(error){
+    } catch (error) {
         if (error.response) {
             if (error.response.status === 404) {
                 throw new Error('Email không khớp.');
@@ -95,21 +95,21 @@ export const resendCode = async (email) => {
     }
 };
 
-export const verifyCode = async(email, code) => {
-    try{
+export const verifyCode = async (email, code) => {
+    try {
         const response = await axios.post('http://localhost:8080/api/datn/auth/verify', { email, code });
-        if(response.status === 200){
+        if (response.status === 200) {
             return true;
         }
-    }catch(error){
+    } catch (error) {
         if (error.response) {
             if (error.response.status === 404) {
                 throw new Error('Email không khớp.');
-            } else if(error.response.status === 400){
+            } else if (error.response.status === 400) {
                 throw new Error('Mã không hợp lệ.')
-            }else if(error.response.status === 410){
+            } else if (error.response.status === 410) {
                 throw new Error('Mã đã hết hạn.')
-            }else {
+            } else {
                 throw new Error('Đã có lỗi xảy ra, vui lòng thử lại.');
             }
         } else {
@@ -119,16 +119,16 @@ export const verifyCode = async(email, code) => {
 };
 
 export const forgotPassword = async (email) => {
-    try{
-        const response = await axios.post('http://localhost:8080/api/datn/auth/forgot-password', { email});
-        if(response.status === 200){
+    try {
+        const response = await axios.post('http://localhost:8080/api/datn/auth/forgot-password', { email });
+        if (response.status === 200) {
             return true;
         }
-    }catch(error){
+    } catch (error) {
         if (error.response) {
             if (error.response.status === 404) {
                 throw new Error('Email chưa được xác minh hoặc chưa được liên kết.');
-            }else {
+            } else {
                 throw new Error('Đã có lỗi xảy ra, vui lòng thử lại.');
             }
         } else {
@@ -138,24 +138,43 @@ export const forgotPassword = async (email) => {
 };
 
 export const resetPassword = async (email, password, code) => {
-    try{
-        const response = await axios.post('http://localhost:8080/api/datn/auth/reset-password', { email, password, code});
-        if(response.status === 200){
+    try {
+        const response = await axios.post('http://localhost:8080/api/datn/auth/reset-password', { email, password, code });
+        if (response.status === 200) {
             return true;
         }
-    }catch(error){
+    } catch (error) {
         if (error.response) {
             if (error.response.status === 404) {
                 throw new Error('Email không khớp.');
-            } else if(error.response.status === 400){
+            } else if (error.response.status === 400) {
                 throw new Error('Mã không hợp lệ.')
-            }else if(error.response.status === 410){
+            } else if (error.response.status === 410) {
                 throw new Error('Mã đã hết hạn.')
-            }else {
+            } else {
                 throw new Error('Đã có lỗi xảy ra, vui lòng thử lại.');
             }
         } else {
             throw new Error('Không thể kết nối với server');
         }
     }
-}
+};
+
+export const getTasks = async (accessToken) => {
+    try {
+        const response = await fetch(`http://localhost:8080/api/datn/auth/tasks`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Đã có lỗi xảy ra, vui lòng thử lại');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw new Error(error.message || 'Không thể kết nối với server');
+    }
+};
