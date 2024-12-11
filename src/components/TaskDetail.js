@@ -155,7 +155,7 @@ const TaskDetail = ({ user, id, idWG, idG, onClose }) => {
                         {task?.completedDate && (<div className={`task-detail-item`}>
                             <span className='task-detail-item-title'>Last completed</span>
                             <div className='icon-container'>
-                                <i className="fas fa-check-circle"></i>
+                                <i className="fas fa-check"></i>
                             </div>
                             <span className='task-detail-item-content'>{formatDate(task?.completedDate)}</span>
                         </div>)}

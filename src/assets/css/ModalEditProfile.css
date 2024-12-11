@@ -1,0 +1,109 @@
+.modal-edit-profile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(68, 68, 68, 0.5);
+    z-index: 1000;
+    display: flex; 
+    justify-content: center;
+}
+
+.container-modal-edit-profile {
+    margin-top: 100px;
+    background: #0d1117;
+    border-radius: 8px;
+    padding: 20px 32px;
+    width: 500px;
+    height: 686px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    animation: fadeIn 0.3s ease-out; 
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-edit-profile-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-edit-profile-header span{
+    font-size: 24px;
+    color: #F6F0FC;
+}
+
+.modal-edit-profile-header button{
+    border: none;
+    background: none;
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+.modal-edit-profile-header button:hover{
+    background-color: #1e2630;
+}
+
+.modal-edit-profile-header button:hover i{
+    color: #F6F0FC;
+}
+
+.modal-edit-profile-header i{
+    font-size: 22px;
+    color: #A2A0A2;
+}
+
+.modal-edit-profile-content{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px 6%;
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.modal-edit-profile-item{
+    width: 47%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.modal-edit-profile-item label{
+    color: #A2A0A2;
+    font-size: 14px;
+}
+
+.modal-edit-profile-item span{
+    color: #d1395a;
+    font-size: 14px;
+}
+
+.modal-edit-profile-item input{
+    background: none;
+    color: #F6F0FC;
+    font-size: 16px;
+    border: 0.5px solid #6c6f72;
+    border-radius: 5px;
+    padding: 6px 8px;
+}
+
+.container-modal-edit-profile .btn-save{
+    margin-top: 20px;
+    width: 20%;
+    border-radius: 10px;
+    padding: 6px 8px;
+    background-color: #238636;
+    color: #F6F0FC;
+    border: none;
+}
+
+.container-modal-edit-profile .btn-save:hover{
+    background-color: #29903b;
+}

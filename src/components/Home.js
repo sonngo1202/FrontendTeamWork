@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import "../assets/css/Home.css";
 import { useOutletContext } from "react-router-dom";
 import Option from "./Option";
+import ModalEditProfile from "./ModalEditProfile";
 
 const Home = () => {
-    const { user } = useOutletContext();
+    const { user, fetchUserData } = useOutletContext();
     const [isOpenOption, setIsOpenOption] = useState(false);
     const [selectedOption, setSelectedOption] = useState("Active");
+    const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
 
     const select = [
         { name: "Active" },
@@ -58,7 +60,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="profile-button">
-                        <button>Edit profile</button>
+                        <button onClick={() => setIsEditProfileOpen(true)}>Edit profile</button>
                         <button>Change password</button>
                     </div>
                     <div className="profile-list">
@@ -104,6 +106,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+            {isEditProfileOpen && (<ModalEditProfile user={user} setIsEditProfileOpen={setIsEditProfileOpen} fetchUserData={fetchUserData} />)}
         </div>
     );
 };

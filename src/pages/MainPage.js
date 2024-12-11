@@ -10,15 +10,16 @@ import { useEffect, useState } from "react";
 function MainPage({ setIsAuthenticated }) {
     const [user, setUser] = useState(null);
 
+    const fetchUserData = async () => {
+        const token = Cookies.get('accessToken');
+        const userCook = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
+        if (token && userCook) {
+            const userData = await detail(userCook.id, token);
+            setUser(userData);
+        }
+    };
+
     useEffect(() => {
-        const fetchUserData = async () => {
-            const token = Cookies.get('accessToken');
-            const userCook = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
-            if (token && userCook) {
-                const userData = await detail(userCook.id, token);
-                setUser(userData);
-            }
-        };
         fetchUserData();
     }, []);
 
@@ -37,10 +38,10 @@ function MainPage({ setIsAuthenticated }) {
                 </style>
             </Helmet>
             <div className="main-container">
-                <Header setIsAuthenticated={setIsAuthenticated} user={user} />
+                <Header setIsAuthenticated={setIsAuthenticated} user={user} fetchUserData={fetchUserData} />
                 <div className="main-content">
                     <Menu user={user} />
-                    <Outlet context={{ user }} />
+                    <Outlet context={{ user, fetchUserData }} />
                 </div>
             </div>
         </>

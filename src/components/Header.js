@@ -3,11 +3,16 @@ import "../assets/css/Header.css";
 import logo from '../assets/image/logo.png';
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
+import Search from "./Search";
+import ModalEditProfile from "./ModalEditProfile";
 
-const Header = ({ setIsAuthenticated, user }) => {
+const Header = ({ setIsAuthenticated, user, fetchUserData }) => {
 
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchKey, setSearchKey] = useState('');
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
 
   const toggleDropdown = () => setIsDropdownOpen(prevState => !prevState);
 
@@ -24,6 +29,9 @@ const Header = ({ setIsAuthenticated, user }) => {
       if (!event.target.closest('.profile-section')) {
         setIsDropdownOpen(false);
       }
+      if (!event.target.closest('.search-section')) {
+        setIsSearchOpen(false);
+      }
     };
     document.addEventListener('click', handleClickOutside);
 
@@ -32,6 +40,7 @@ const Header = ({ setIsAuthenticated, user }) => {
     };
   }, []);
 
+
   return (
     <header className="container-header">
       <div className="logo-section">
@@ -39,10 +48,11 @@ const Header = ({ setIsAuthenticated, user }) => {
         <h1 className="brand-name">Pandoras</h1>
       </div>
       <div className="search-section">
-        <div className="search-wrapper">
+        <div className="search-wrapper" onClick={() => setIsSearchOpen(true)}>
           <i className="fas fa-search search-icon"></i>
-          <input type="text" placeholder="Search..." className="search-input" />
+          <input type="text" placeholder="Search..." className="search-input" value={searchKey} onChange={(e) => setSearchKey(e.target.value)} />
         </div>
+        {isSearchOpen && (<Search searchKey={searchKey} user={user} setIsSearchOpen={setIsSearchOpen} setSearchKey={setSearchKey} />)}
       </div>
       <div className="profile-section" onClick={toggleDropdown}>
         <img src={`https://firebasestorage.googleapis.com/v0/b/datn-5ae48.appspot.com/o/${user?.picture}?alt=media`} alt="Avatar" className="avatar" />
@@ -61,7 +71,7 @@ const Header = ({ setIsAuthenticated, user }) => {
               <button className="dropdown-option">
                 <i className="fas fa-key"></i> Change Password
               </button>
-              <button className="dropdown-option">
+              <button className="dropdown-option" onClick={() => setIsEditProfileOpen(true)}>
                 <i className="fas fa-edit"></i> Edit Profile
               </button>
             </div>
@@ -72,6 +82,7 @@ const Header = ({ setIsAuthenticated, user }) => {
           </div>
         )}
       </div>
+      {isEditProfileOpen && (<ModalEditProfile user={user} setIsEditProfileOpen={setIsEditProfileOpen} fetchUserData={fetchUserData} />)}
     </header>
   );
 };
