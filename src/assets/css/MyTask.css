@@ -1,0 +1,48 @@
+.my-task-week-month{
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-bottom: 0.5px solid #6c6f72;
+    z-index: 1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 2);
+    transition: box-shadow 0.2s ease;
+    gap: 15px;
+}
+
+.my-task-week-month p{
+    margin: 0;
+    padding: 4px 6px;
+    color: #F6F0FC;
+    font-size: 14px;
+    font-weight: 500;
+    border: 0.5px solid #6c6f72;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.my-task-week-month p:hover{
+    background-color: #1e2630;
+}
+
+.my-task-week-month button{
+    padding: 6px 10px;
+    background: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.my-task-week-month button i{
+    color: #F6F0FC;
+    font-size: 14px;
+}
+
+.my-task-week-month button:hover{
+    background-color: #1e2630;
+}
+
+.my-task-week-month span{
+    color: #F6F0FC;
+    font-size: 14px;
+    font-weight: bold;
+}

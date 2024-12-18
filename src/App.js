@@ -16,6 +16,8 @@ import File from './components/File';
 import MyTask from './components/MyTask';
 import BoardMyTask from './components/BoardMyTask';
 import Notification from './components/Notification';
+import GroupTimeline from './components/GroupTimeline';
+import Calendar from './components/Calendar';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!Cookies.get('accessToken'));
@@ -45,10 +47,12 @@ function App() {
           <Route path="board/:idWG/tasks/:idTask" element={<BoardGroup />} />
           <Route path="overview" element={<Overview />} />
           <Route path="file" element={<File />} />
+          <Route path='timeline' element={(<GroupTimeline />)} />
         </Route>
         <Route path="my-home" element={<Home />} />
         <Route path='my-task/' element={<MyTask />} >
           <Route path='board' element={<BoardMyTask />} />
+          <Route path='calendar' element={<Calendar />} />
         </Route>
         <Route path='my-notification' element={<Notification/>} />
       </Route> 

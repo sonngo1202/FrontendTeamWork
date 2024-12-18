@@ -51,29 +51,32 @@ const File = () => {
     };
 
     return (
-        files.length > 0 ?
-            (<div className="container-file">
-                {files.map((item) =>
-                    <div key={item?.id} className='content-item-file' onClick={() => handleDocumentClick(item?.url, getFileExtension(item?.name))}>
-                        <div className={`item-file-icon ${getFileExtension(item?.name) === 'pdf' ? 'pdf' : 'txt'}`}>
-                            {getFileExtension(item?.name) === 'pdf' ? (<i className='fas fa-file-pdf'></i>) : (<i className='fas fa-file-alt'></i>)}
-                        </div>
-                        <div className='item-file-info'>
-                            <span>{item?.name}</span>
-                            <div className="item-file-bottom">
-                                <span className='item-file-type'>{getFileExtension(item?.name) === 'pdf' ? 'PDF' : 'Word Document'}</span>
-                                <span className="item-file-space">●</span>
-                                <span className="item-file-upload">{formatDate(item?.uploadAt)}</span>
+        <div>
+            {files.length > 0 &&
+                (<div className="container-file">
+                    {files.map((item) =>
+                        <div key={item?.id} className='content-item-file' onClick={() => handleDocumentClick(item?.url, getFileExtension(item?.name))}>
+                            <div className={`item-file-icon ${getFileExtension(item?.name) === 'pdf' ? 'pdf' : 'txt'}`}>
+                                {getFileExtension(item?.name) === 'pdf' ? (<i className='fas fa-file-pdf'></i>) : (<i className='fas fa-file-alt'></i>)}
+                            </div>
+                            <div className='item-file-info'>
+                                <span>{item?.name}</span>
+                                <div className="item-file-bottom">
+                                    <span className='item-file-type'>{getFileExtension(item?.name) === 'pdf' ? 'PDF' : 'Word Document'}</span>
+                                    <span className="item-file-space">●</span>
+                                    <span className="item-file-upload">{formatDate(item?.uploadAt)}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
-            </div>) :
-            (<div className="container-file-empty">
+                    )}
+                </div>)}
+            {files.length < 0 && (<div className="container-file-empty">
                 <img src={empty}></img>
                 <span>Tất cả các tệp đính kèm nhiệm vụ sẽ được</span>
                 <span>lưu trữ ở đây.</span>
-            </div>)
+            </div>)}
+        </div>
+
     );
 };
 export default File;

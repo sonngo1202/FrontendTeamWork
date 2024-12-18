@@ -52,6 +52,7 @@ const ModalEditProfile = ({ user, setIsEditProfileOpen, fetchUserData }) => {
                         <input
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
+                            required
                         />
                     </div>
                     <div className='modal-edit-profile-item'>
@@ -59,6 +60,7 @@ const ModalEditProfile = ({ user, setIsEditProfileOpen, fetchUserData }) => {
                         <input
                             value={job}
                             onChange={(e) => setJob(e.target.value)}
+                            required
                         />
                     </div>
                     <div className='modal-edit-profile-item'>
@@ -66,6 +68,7 @@ const ModalEditProfile = ({ user, setIsEditProfileOpen, fetchUserData }) => {
                         <input
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
+                            required
                         />
                     </div>
                 </div>

@@ -27,6 +27,11 @@
 .overview-project-description-header i{
     font-size: 14px;
     color: #A2A0A2;
+    cursor: pointer;
+}
+
+.overview-project-description-header i:hover{
+    color: #F6F0FC;
 }
 
 .overview-project-description textarea{
@@ -42,7 +47,7 @@
 }
 
 .overview-project-description textarea:hover{
-    border: 0.5px solid #6c6f72;
+    border: 0.5px solid transparent;
 }
 
 .overview-project-roles{
@@ -72,6 +77,7 @@
     gap: 8px;
     padding: 10px 8px;
     border-radius: 7px;
+    cursor: pointer;
 }
 
 .overview-project-add-member:hover{
@@ -90,8 +96,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     border: 1px dashed #A2A0A2;
 }
@@ -108,6 +114,8 @@
     gap: 7px;
     padding: 10px 8px;
     border-radius: 7px;
+    cursor: pointer;
+    position: relative;
 }
 
 .overview-project-item-member:hover{
@@ -118,8 +126,8 @@
 }
 
 .overview-project-item-member-left img{
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
 }
 

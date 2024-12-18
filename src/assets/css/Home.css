@@ -87,6 +87,7 @@
     width: 140px;
     color: #F0F6FC;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .profile-button button:hover {

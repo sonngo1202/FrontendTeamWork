@@ -40,7 +40,7 @@ function MainPage({ setIsAuthenticated }) {
             <div className="main-container">
                 <Header setIsAuthenticated={setIsAuthenticated} user={user} fetchUserData={fetchUserData} />
                 <div className="main-content">
-                    <Menu user={user} />
+                    <Menu user={user} fetchUserData={fetchUserData} />
                     <Outlet context={{ user, fetchUserData }} />
                 </div>
             </div>

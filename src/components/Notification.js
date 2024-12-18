@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import '../assets/css/Notification.css';
 import { useOutletContext } from 'react-router-dom';
-import { getByIsNotDeleted, getByIsDeleted, maskNotifiAsRead } from '../services/notificationService';
+import { getByIsNotDeleted, getByIsDeleted, maskNotifiAsRead, deleteNoti } from '../services/notificationService';
 import Cookies from 'js-cookie';
 import TaskDetail from './TaskDetail';
 
@@ -55,7 +55,6 @@ const Notification = () => {
 
         if (difference > 24 * 60 * 60 * 1000) {
             const options = { day: '2-digit', month: 'short', year: 'numeric' };
-            console.log(difference);
             return input.toLocaleDateString('en-US', options);
         } else if (difference > 60 * 60 * 1000) {
             const hours = Math.floor(difference / (60 * 60 * 1000));
@@ -65,8 +64,6 @@ const Notification = () => {
             return `${minutes}m ago`;
         } else {
             const seconds = Math.floor(difference / 1000);
-            console.log(seconds);
-            console.log(difference);
             return `${seconds}s ago`;
         }
     }
@@ -91,6 +88,29 @@ const Notification = () => {
                 });
         }
     }
+
+    const deleteNotification = async (item, accessToken) => {
+        if (accessToken) {
+            try {
+                const data = await deleteNoti(user?.id, item?.notification.id, accessToken);
+            } catch (error) {
+                console.error("Failed to fetch user data:", error);
+            }
+        }
+
+    }
+
+    const handleDelete = (item) => {
+        const accessToken = Cookies.get('accessToken');
+
+        deleteNotification(item, accessToken)
+            .then(() => {
+                return fetchData();
+            })
+            .catch((error) => {
+                console.error("Failed to update user:", error);
+            });
+    };
 
     const handleMouseEnter = (item) => {
         setItemHover(item);
@@ -139,7 +159,10 @@ const Notification = () => {
                                         <span>●</span>
                                     </div>)}
                                     {itemHover === item?.id && (<div className='notification-item-task-right'>
-                                        <i className='fas fa-archive'></i>
+                                        <i className='fas fa-archive' onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDelete(item);
+                                        }}></i>
                                     </div>)}
                                 </div>
                                 <div className='notification-item-footer'>

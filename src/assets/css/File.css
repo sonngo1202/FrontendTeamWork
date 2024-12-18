@@ -45,7 +45,7 @@
     gap: 5px;
 }
 
-.item-file-bottom{
+.item-file-bottom {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -56,17 +56,17 @@
     font-size: 14px;
 }
 
-.item-file-space{
+.item-file-space {
     font-size: 8px;
     color: #A2A0A2;
 }
 
-.item-file-upload{
+.item-file-upload {
     font-size: 14px;
     color: #A2A0A2;
 }
 
-.container-file-empty{
+.container-file-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -78,13 +78,20 @@
     border-radius: 8px;
 }
 
-.container-file-empty img{
+.container-file-empty img {
     height: 100px;
 }
 
-.container-file-empty span{
+.container-file-empty span {
     color: #F5F4F3;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: bold;
     font-size: 20px;
+}
+
+.content-item-file {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }

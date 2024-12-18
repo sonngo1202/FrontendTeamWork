@@ -185,28 +185,35 @@ export const resetPassword = async (email, password, code) => {
     }
 };
 
-export const getTasks = async (accessToken) => {
+export const changePassword = async (currentPassword, newPassword, accessToken) => {
     try {
-        const response = await fetch(`http://localhost:8080/api/datn/auth/tasks`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-            },
-        });
+        const response = await axios.post('http://localhost:8080/api/datn/auth/change-password',
+            { currentPassword, newPassword },
+            {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
 
-        if (!response.ok) {
-            throw new Error('Đã có lỗi xảy ra, vui lòng thử lại');
+        if (response.status === 200) {
+            return true;
         }
-        const data = await response.json();
-        return data;
     } catch (error) {
-        throw new Error(error.message || 'Không thể kết nối với server');
+        if (error.response) {
+            if (error.response.status === 500) {
+                throw new Error('Mật khẩu hiện tại không đúng.');
+            } else {
+                throw new Error('Đã có lỗi xảy ra, vui lòng thử lại.');
+            }
+        } else {
+            throw new Error('Không thể kết nối với server');
+        }
     }
 };
 
-export const getDataSearch = async (accessToken) => {
+export const searchAll = async (idG, key, accessToken) => {
     try {
-        const response = await fetch(`http://localhost:8080/api/datn/auth/tasks/data-search`, {
+        const response = await fetch(`http://localhost:8080/api/datn/auth/${key}/group/${idG}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,

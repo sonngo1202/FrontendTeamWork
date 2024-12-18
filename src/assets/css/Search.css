@@ -180,3 +180,10 @@
     font-size: 14px;
     color: #A2A0A2;
 }
+
+.container-search .no-result{
+    font-size: 14px;
+    font-weight: 200;
+    color: #F6F0FC;
+    padding: 5px 19px;
+}

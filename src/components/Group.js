@@ -7,7 +7,7 @@ import { detail } from '../services/groupService'
 const Group = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { user } = useOutletContext();
+    const { user, fetchUserData } = useOutletContext();
     const [group, setGroup] = useState(null);
     const basePath = location.pathname.match(/^\/group\/\d+/)?.[0];
     const groupId = basePath.match(/\/group\/(\d+)/)?.[1];
@@ -17,7 +17,7 @@ const Group = () => {
     const groupItems = [
         { name: "Overview", icon: "fas fa-clipboard-list", path: `/group/${groupId}/overview` },
         { name: "Board", icon: "fas fa-columns", path: `/group/${groupId}/board` },
-        { name: "Timeline", icon: "fas fa-sliders-h", path: `/group/${groupId}/timeline` },
+        // { name: "Timeline", icon: "fas fa-sliders-h", path: `/group/${groupId}/timeline` },
         { name: "Dashboard", icon: "fas fa-project-diagram", path: `/group/${groupId}/dashboard`, isManager: true },
         { name: "File", icon: "fas fa-file-alt", path: `/group/${groupId}/file` }
     ];
@@ -32,19 +32,20 @@ const Group = () => {
         navigate(item.path);
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const accessToken = Cookies.get('accessToken');
-            if (accessToken) {
-                try {
-                    const groupData = await detail(groupId, accessToken);
-                    setGroup(groupData);
-                } catch (error) {
-                    console.error("Failed to fetch user data:", error);
-                }
+    const fetchDataGroup = async () => {
+        const accessToken = Cookies.get('accessToken');
+        if (accessToken) {
+            try {
+                const groupData = await detail(groupId, accessToken);
+                setGroup(groupData);
+            } catch (error) {
+                console.error("Failed to fetch user data:", error);
             }
         }
-        fetchData()
+    }
+
+    useEffect(() => {
+        fetchDataGroup();
     }, [groupId]);
 
     useEffect(() => {
@@ -53,7 +54,7 @@ const Group = () => {
             setSelectedItem(activeItem.name);
         }
     }, [location]);
-    
+
     return (
         <div className="container-group">
             <div className="group-header">
@@ -82,7 +83,7 @@ const Group = () => {
                     )}
                 </div>
             )}
-            <Outlet context={{ group, user }} />
+            <Outlet context={{ group, user, fetchUserData, fetchDataGroup }} />
         </div>
     );
 };

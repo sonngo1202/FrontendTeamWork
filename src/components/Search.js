@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../assets/css/Search.css';
-import { getDataSearch } from '../services/authService';
+import { getDataSearch } from '../services/taskService';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,6 +25,15 @@ const Search = ({ searchKey, user, setIsSearchOpen, setSearchKey }) => {
         setSelectedOption(null);
     };
 
+    const removeAccents = (str) => {
+        return str
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/đ/g, "d")
+            .replace(/Đ/g, "D")
+            .toLowerCase(); 
+    }
+
     const fetchData = async () => {
         const accessToken = Cookies.get('accessToken');
         if (accessToken) {
@@ -45,12 +54,12 @@ const Search = ({ searchKey, user, setIsSearchOpen, setSearchKey }) => {
     useEffect(() => {
         if (searchKey) {
             const filteredT = data.filter((item) =>
-                item.name.toLowerCase().includes(searchKey.toLowerCase())
+                removeAccents(item.name).includes(removeAccents(searchKey))
             );
             setFilteredTask(filteredT);
 
             const filteredG = user?.roles.filter((item) =>
-                item.group.name.toLowerCase().includes(searchKey.toLowerCase())
+                removeAccents(item.group.name).includes(removeAccents(searchKey))
             );
             setFilteredGroup(filteredG);
         } else {
@@ -116,6 +125,11 @@ const Search = ({ searchKey, user, setIsSearchOpen, setSearchKey }) => {
                             </div>)}
                         </div>
                     )}
+                </div>
+            )}
+            {filteredGroup.length <= 0 && filteredTask.length <= 0 && searchKey && (
+                <div className='no-result'>
+                    <span>Không tìm thấy kết quả nào.</span>
                 </div>
             )}
         </div>

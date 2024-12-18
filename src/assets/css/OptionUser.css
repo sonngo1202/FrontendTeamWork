@@ -1,0 +1,35 @@
+.container-option-user {
+    display: flex;
+    flex-direction: column;
+    width: 172px;
+    border: 0.5px solid #6c6f72;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #0d1117;
+    padding: 4px 0px;
+    max-height: 300px;
+    overflow-y: auto;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    position: absolute;
+    z-index: 1000;
+}
+
+.option-user-item{
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.option-user-item:hover{
+    background-color: #565557;
+}
+
+.option-user-item span{
+    color: #F6F0FC;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.option-user-item .delete{
+    color: #EB7586;
+}
+

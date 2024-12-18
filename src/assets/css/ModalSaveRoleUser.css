@@ -1,0 +1,52 @@
+.container-role-user {
+    display: flex;
+    flex-direction: column;
+    width: 435px;
+    border: 0.5px solid #6c6f72;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #0d1117;
+    padding: 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    position: absolute;
+    z-index: 1000;
+    gap: 5px;
+}
+
+.container-role-user span{
+    color: #A2A0A2;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.container-role-user .role-user-input{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.container-role-user .role-user-input input{
+    padding: 6px 12px;
+    background: none;
+    color: #F6F0FC;
+    font-size: 14px;
+    width: 100%;
+    border: 0.5px solid #6c6f72;
+    border-radius: 5px;
+}
+
+.container-role-user .role-user-input button{
+    background-color: #4573D2;
+    color: #F6F0FC;
+    border: none;
+    padding: 7px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container-role-user .role-user-input button:hover{
+    background-color: #1e61e6;
+}

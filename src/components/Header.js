@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 import Search from "./Search";
 import ModalEditProfile from "./ModalEditProfile";
+import ModalChangePassword from "./ModalChangePassword";
 
 const Header = ({ setIsAuthenticated, user, fetchUserData }) => {
 
@@ -13,6 +14,7 @@ const Header = ({ setIsAuthenticated, user, fetchUserData }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchKey, setSearchKey] = useState('');
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
   const toggleDropdown = () => setIsDropdownOpen(prevState => !prevState);
 
@@ -68,7 +70,7 @@ const Header = ({ setIsAuthenticated, user, fetchUserData }) => {
               <p className="dropdown-username">{user?.fullName}</p>
             </div>
             <div className="dropdown-options">
-              <button className="dropdown-option">
+              <button className="dropdown-option" onClick={() => setIsChangePasswordOpen(true)}>
                 <i className="fas fa-key"></i> Change Password
               </button>
               <button className="dropdown-option" onClick={() => setIsEditProfileOpen(true)}>
@@ -83,6 +85,7 @@ const Header = ({ setIsAuthenticated, user, fetchUserData }) => {
         )}
       </div>
       {isEditProfileOpen && (<ModalEditProfile user={user} setIsEditProfileOpen={setIsEditProfileOpen} fetchUserData={fetchUserData} />)}
+      {isChangePasswordOpen && (<ModalChangePassword user={user} setIsChangePasswordOpen={setIsChangePasswordOpen} />)}
     </header>
   );
 };

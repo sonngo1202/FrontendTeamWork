@@ -4,7 +4,7 @@
     width: 160px; 
     border: 0.5px solid #6c6f72; 
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #0d1117;
     padding: 7px 0px;
     max-height: 300px;
@@ -27,7 +27,7 @@
 }
 
 .option-item:hover {
-    background-color: #151b23; 
+    background-color: #1e2630; 
 }
 
 .option-selected{
