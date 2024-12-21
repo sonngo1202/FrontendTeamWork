@@ -1,15 +1,52 @@
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import '../assets/css/BoardGroup.css'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TaskDetail from '../components/TaskDetail';
+import ModalWorkGroup from "./ModalWorkGroup";
+import OptionWG from "./OptionWG";
+import { deleteWG } from '../services/workGroupService';
+import Cookies from 'js-cookie';
+import ModalConfirm from "./ModalConfirm";
+
+const isManagerOfGroup = (user, group) => {
+    if (!user || !user.roles || !group) {
+        return false;
+    }
+
+    return user.roles.some(userGroup =>
+        userGroup.group.id === group.id && userGroup.role === 'MANAGER'
+    );
+};
 
 const BoardGroup = () => {
-    const { group, user } = useOutletContext();
+    const { group, user, fetchDataGroup } = useOutletContext();
     const navigate = useNavigate();
     const [isOpenSubTask, setIsOpenSubTask] = useState(false);
+    const [isWGOpen, setIsWGOpen] = useState(false);
+    const [selectedOptionItem, setSelectedOptionItem] = useState(null);
+    const [showOption, setShowOption] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const itemWGRef = useRef([]);
+    const optionWGRef = useRef(null);
 
     const { idTask, idWG, id } = useParams();
 
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (
+                optionWGRef.current && !optionWGRef.current.contains(e.target) &&
+                !itemWGRef.current.some(ref => ref && ref.contains(e.target))
+            ) {
+                setShowOption(false);
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
 
     document.addEventListener('mouseover', (event) => {
         const target = event.target;
@@ -32,15 +69,15 @@ const BoardGroup = () => {
     };
 
     const getColor = (item) => {
-        if(item?.status.name === 'Completed'){
-            if(item.isDelay) return "#D32F2F";
+        if (item?.status.name === 'Completed') {
+            if (item.isDelay) return "#D32F2F";
             return "#A2A0A2";
         }
         const today = new Date();
         const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         const end = new Date(item?.endDate);
         const endWithoutTime = new Date(end.getFullYear(), end.getMonth(), end.getDate());
-    
+
         const diff = (endWithoutTime - todayWithoutTime) / (1000 * 60 * 60 * 24);
 
         if (diff < 0) return "#D32F2F";
@@ -63,19 +100,42 @@ const BoardGroup = () => {
         navigate(`/group/${id}/board/${workGroup.id}/tasks/${task.id}`);
     }
 
+    const deleteWorkGroup = async () => {
+        const accessToken = Cookies.get('accessToken');
+        if (accessToken) {
+            try {
+                const data = await deleteWG(group?.id, selectedOptionItem?.id, accessToken);
+                if (data) {
+                    fetchDataGroup();
+                    setShowOption(false);
+                    setShowConfirm(false);
+                    setSelectedOptionItem(null);
+                } else {
+                    console.error("Failed to delete work group: Response was not true.");
+                }
+            } catch (error) {
+                console.error("Failed to delete work group:", error);
+            }
+        }
+    }
+
     return (
         <div className={`container-board ${idTask ? 'selected' : ''}`}>
-            {group && group.listWorkGroup && group.listWorkGroup.map((item =>
-                <div key={item.id} className={`board-item-work-group`}>
+            {group && group.listWorkGroup && group.listWorkGroup.map((item, index) =>
+                <div key={index} className={`board-item-work-group`}>
                     <div className="board-item-work-group-header">
                         <div className="board-title">
                             <span className="board-title-name">{item.name}</span>
                             <span className="board-title-count">{item?.listTask.length}</span>
                         </div>
-                        <div className="board-select">
+                        {isManagerOfGroup(user, group) && <div className="board-select" onClick={() => {
+                            setSelectedOptionItem(item);
+                            setShowOption(true);
+                        }}>
                             <button><i className="fas fa-plus"></i></button>
-                            <button><i className="fas fa-ellipsis-h"></i></button>
-                        </div>
+                            <button ref={(el) => itemWGRef.current[index] = el}><i className="fas fa-ellipsis-h"></i></button>
+                            {showOption && selectedOptionItem?.id === item?.id && <OptionWG optionWGRef={optionWGRef} openWG={setIsWGOpen} showConfirm={setShowConfirm} workGroup={selectedOptionItem} deleteWG={deleteWorkGroup}/>}
+                        </div>}
                     </div>
                     <div className={`board-item-work-group-content ${item?.listTask.length > 0 ? 'list' : 'empty'}`}>
                         {item?.listTask.length > 0 && item.listTask.map((itemTask =>
@@ -125,28 +185,33 @@ const BoardGroup = () => {
                                             </div>
                                         </div>
                                     ))}
-                                    <button className="add-subtask">
+                                    {isManagerOfGroup(user, group) && <button className="add-subtask">
                                         <i className="fas fa-plus"></i>
                                         <span>Add subtask</span>
-                                    </button>
+                                    </button>}
                                 </div>}
                             </div>
                         ))}
-                        <button className="add-task">
+                        {isManagerOfGroup(user, group) && <button className="add-task">
                             <i className="fas fa-plus"></i>
                             <span>Add task</span>
-                        </button>
+                        </button>}
                     </div>
                 </div>
-            ))}
-            <div className="board-add-work-group">
+            )}
+            {isManagerOfGroup(user, group) && <div className="board-add-work-group" onClick={() => { setIsWGOpen(true); setSelectedOptionItem(null); }}>
                 <button className="add-work-group">
                     <i className="fas fa-plus"></i>
                     <span>Add work group</span>
                 </button>
                 <div className="board-add-work-group-content"></div>
-            </div>
+            </div>}
             {idTask && (<TaskDetail user={user} id={idTask} idWG={idWG} idG={id} />)}
+            {!isManagerOfGroup(user, group) && group?.listWorkGroup.length <= 0 && <div className="board-empty">
+                <span>There are currently no tasks.</span>
+            </div>}
+            {isWGOpen && (<ModalWorkGroup setClose={setIsWGOpen} group={group} fetchDataGroup={fetchDataGroup} workGroup={selectedOptionItem} />)}
+            {showConfirm && <ModalConfirm message={'Warning: This work group contains assigned tasks. Deleting it will result in the removal of all its tasks. Do you want to proceed?'} actionCancel={setShowConfirm} actionConfirm={deleteWorkGroup} />}
         </div>
     );
 

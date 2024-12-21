@@ -13,7 +13,7 @@ const ModalGroupDetail = ({ group, setClose, fetchUserData, fetchDataGroup }) =>
             try {
                 const data = await add(name, des, accessToken);
             } catch (error) {
-                console.error("Failed to fetch user data:", error);
+                console.error("Failed to add group data:", error);
             }
         }
     }
@@ -21,9 +21,9 @@ const ModalGroupDetail = ({ group, setClose, fetchUserData, fetchDataGroup }) =>
     const editGroup = async (accessToken) => {
         if (accessToken) {
             try {
-                const data = await edit(group?.id ,name, des, accessToken);
+                const data = await edit(group?.id, name, des, accessToken);
             } catch (error) {
-                console.error("Failed to fetch user data:", error);
+                console.error("Failed to edit group data:", error);
             }
         }
     }
@@ -49,7 +49,7 @@ const ModalGroupDetail = ({ group, setClose, fetchUserData, fetchDataGroup }) =>
                 return fetchUserData(accessToken);
             })
             .then(() => {
-                if(fetchDataGroup){
+                if (fetchDataGroup) {
                     return fetchDataGroup(accessToken);
                 }
             })
@@ -63,7 +63,7 @@ const ModalGroupDetail = ({ group, setClose, fetchUserData, fetchDataGroup }) =>
         <div className={`modal-group-detail-overlay`}>
             <div className='container-modal-group-detail'>
                 <div className='modal-group-detail-header'>
-                    {group ? <span>Edit Group</span> : <span>Create Group</span>}
+                    {group ? <span>Edit group</span> : <span>Create group</span>}
                     <button onClick={() => setClose(false)}><i className='fas fa-times'></i></button>
                 </div>
                 <div className='modal-group-detail-content'>

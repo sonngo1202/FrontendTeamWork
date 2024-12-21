@@ -52,6 +52,7 @@
     align-items: center;
     cursor: pointer;
     gap: 10px;
+    position: relative;
 }
 
 .board-item-work-group-header button {
@@ -159,16 +160,16 @@
 .board-add-work-group:hover .add-work-group {
     background-color: #252c30;
     color: #FFFFFF;
-    z-index: 1;
+    /* z-index: 1;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 2);
-    transition: box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease; */
 }
 
 .board-add-work-group:hover .board-add-work-group-content {
     background-color: #252c30;
-    z-index: 1;
+    /* z-index: 1;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 2);
-    transition: box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease; */
 }
 
 .board-item-task {
@@ -354,6 +355,7 @@
     padding: 3px 0px;
     border-bottom: 0.1px solid #6c6f72;
     border-top: 0.1px solid transparent;
+    cursor: pointer;
 }
 
 .board-item-subtask:hover {
@@ -474,4 +476,17 @@
 .board-subtask .add-subtask i {
     font-size: 14px;
     color: #A2A0A2;
+}
+
+.board-empty{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 280px;
+}
+
+.board-empty span{
+    color: #F0F6FC;
+    font-size: 24px;
+    font-weight: 500;
 }

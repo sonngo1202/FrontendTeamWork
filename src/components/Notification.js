@@ -158,7 +158,7 @@ const Notification = () => {
                                     {!item?.isRead && itemHover !== item?.id && (<div className='notification-item-task-right'>
                                         <span>●</span>
                                     </div>)}
-                                    {itemHover === item?.id && (<div className='notification-item-task-right'>
+                                    {itemHover === item?.id && selectedAction && (<div className='notification-item-task-right'>
                                         <i className='fas fa-archive' onClick={(e) => {
                                             e.stopPropagation();
                                             handleDelete(item);

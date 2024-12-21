@@ -227,7 +227,6 @@
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
 }
 
 .board-my-task-item-subtask {
@@ -238,6 +237,7 @@
     padding: 3px 0px;
     border-bottom: 0.1px solid #6c6f72;
     border-top: 0.1px solid transparent;
+    cursor: pointer;
 }
 
 .board-my-task-item-subtask:hover {

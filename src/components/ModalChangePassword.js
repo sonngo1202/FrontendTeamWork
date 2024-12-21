@@ -73,7 +73,7 @@ const ModalChangePassword = ({ user, setIsChangePasswordOpen }) => {
         <div className={`modal-change-password-overlay`}>
             <div className='container-modal-change-password'>
                 {!isSuccess && <div className='modal-change-password-header'>
-                    <span>Change Password</span>
+                    <span>Change password</span>
                     <button onClick={() => setIsChangePasswordOpen(false)}><i className='fas fa-times'></i></button>
                 </div>}
                 {!isSuccess && <div className='modal-change-password-content'>

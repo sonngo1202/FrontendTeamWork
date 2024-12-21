@@ -82,7 +82,7 @@ const Overview = () => {
                         <span>Add member</span>
                     </div>}
                     {group?.listUserGroup && group?.listUserGroup.map((item, index) =>
-                        <div key={item?.id} className='overview-project-item-member' onClick={(e) => handleItemClick(e, item)} ref={(el) => itemMemberRef.current[index] = el} >
+                        <div key={index} className='overview-project-item-member' onClick={(e) => handleItemClick(e, item)} ref={(el) => itemMemberRef.current[index] = el} >
                             <div className='overview-project-item-member-left'>
                                 <img
                                     src={`https://firebasestorage.googleapis.com/v0/b/datn-5ae48.appspot.com/o/${item?.user.picture}?alt=media`}
@@ -104,7 +104,7 @@ const Overview = () => {
             </div>
             {isEditGroupOpen && (<ModalGroupDetail setClose={setIsEditGroupOpen} fetchUserData={fetchUserData} group={group} fetchDataGroup={fetchDataGroup} />)}
             {isAddMemberOpen && (<ModalAddMember setClose={setIsAddMemberOpen} fetchDataGroup={fetchDataGroup} group={group} />)}
-            {showError && (<ModalError setClose={setShowError} error={'Thành viên đang có nhiệm vụ. Vui lòng đảm bảo thành viên đã hết nhiệm vụ khi xóa.'} />)}
+            {showError && (<ModalError setClose={setShowError} error={'The member currently has assigned tasks. Please ensure the member has no remaining tasks before deleting.'} />)}
             {showRole && (<ModalSaveRoleUser x={x} y={y} fetchDataGroup={fetchDataGroup} selectedUserOption={selectedUserOption} setClose={setShowRole} roleUserRef={roleUserRef} setCloseOption={setShowOption} group={group} />)}
         </div>
     );

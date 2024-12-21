@@ -43,7 +43,7 @@ const ModalEditProfile = ({ user, setIsEditProfileOpen, fetchUserData }) => {
         <div className={`modal-edit-profile-overlay`}>
             <div className='container-modal-edit-profile'>
                 <div className='modal-edit-profile-header'>
-                    <span>Edit Profile</span>
+                    <span>Edit profile</span>
                     <button onClick={() => setIsEditProfileOpen(false)}><i className='fas fa-times'></i></button>
                 </div>
                 <div className='modal-edit-profile-content'>
