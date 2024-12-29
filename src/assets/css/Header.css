@@ -17,6 +17,7 @@
 .logo-section {
     display: flex;
     align-items: center;
+    user-select: none;
 }
 
 .container-header .logo {
@@ -36,11 +37,12 @@
     display: flex;
     justify-content: center;
     position: relative;
+    user-select: none;
 }
 
 .search-wrapper {
     position: relative;
-    width: 100%;
+    width: 80%;
     max-width: 600px;
 }
 
@@ -78,6 +80,7 @@
     align-items: center;
     position: relative;
     gap: 8px;
+    user-select: none;
 }
 
 .avatar {

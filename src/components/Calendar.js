@@ -28,7 +28,17 @@ const Calendar = () => {
                 <div key={item.id} className='calendar-item'>
                     <div className='calendar-item-header'>
                         <span className='calendar-item-header-name'>{item.name}</span>
-                        <span className='calendar-item-header-day'>{item.day}</span>
+                        <span className={`calendar-item-header-day ${(
+                            new Date(item.value).getFullYear() === new Date().getFullYear() &&
+                            new Date(item.value).getMonth() === new Date().getMonth() &&
+                            new Date(item.value).getDate() === new Date().getDate()
+                        )
+                            ? 'active'
+                            : ''
+                            }`}
+                        >
+                            {item.day}
+                        </span>
                     </div>
                     <div className='calendar-item-content'>
                         {listTask.filter(task => isDateInRange(item.value, task.startDate, task.endDate)).map((itemTask) =>

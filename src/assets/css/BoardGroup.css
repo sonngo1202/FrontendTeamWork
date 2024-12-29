@@ -50,7 +50,6 @@
 .board-select {
     display: flex;
     align-items: center;
-    cursor: pointer;
     gap: 10px;
     position: relative;
 }
@@ -61,6 +60,7 @@
     border-radius: 5px;
     color: #A2A0A2;
     padding: 4px 6px;
+    cursor: pointer;
 }
 
 .board-item-work-group-header button:hover {
@@ -126,6 +126,7 @@
     outline: none;
     border: 0.5px solid transparent;
     transition: border 0.3s ease;
+    cursor: pointer;
 }
 
 .add-work-group {
@@ -453,6 +454,7 @@
     padding: 7px 0px;
     border: none;
     background: none;
+    cursor: pointer;
 }
 
 .board-subtask .add-subtask:hover {

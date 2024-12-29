@@ -23,6 +23,7 @@
     border-bottom: 0.5px solid #6c6f72;
 }
 
+
 .calendar-item-header-name{
     color: #A2A0A2;
     font-size: 14px;
@@ -32,6 +33,10 @@
 .calendar-item-header-day{
     font-size: 20px;
     color: #F6F0FC;
+}
+
+.calendar-item-header-day.active{
+    color: #4573D2;
 }
 
 .calendar-item-content{

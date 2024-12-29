@@ -16,8 +16,10 @@ import File from './components/File';
 import MyTask from './components/MyTask';
 import BoardMyTask from './components/BoardMyTask';
 import Notification from './components/Notification';
-import GroupTimeline from './components/GroupTimeline';
 import Calendar from './components/Calendar';
+import DashboardByStatus from './components/DashboardByStatus';
+import DashboardByMember from './components/DashboardByMember';
+import StatDetail from './components/StatDetail';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!Cookies.get('accessToken'));
@@ -47,7 +49,11 @@ function App() {
           <Route path="board/:idWG/tasks/:idTask" element={<BoardGroup />} />
           <Route path="overview" element={<Overview />} />
           <Route path="file" element={<File />} />
-          <Route path='timeline' element={(<GroupTimeline />)} />
+          <Route path='dashboard' element={<DashboardByStatus />} />
+          <Route path='dashboard/by-status' element={<DashboardByStatus />} />
+          <Route path='dashboard/by-member' element={<DashboardByMember />} />
+          <Route path='dashboard/by-status/:idS' element={<StatDetail />} />
+          <Route path='dashboard/by-member/:idU' element={<StatDetail />} />
         </Route>
         <Route path="my-home" element={<Home />} />
         <Route path='my-task/' element={<MyTask />} >

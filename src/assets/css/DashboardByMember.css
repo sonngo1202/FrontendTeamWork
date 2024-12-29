@@ -1,0 +1,48 @@
+.container-dashboard-by-member{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding: 30px 40px 10px 40px;
+    max-height: 679px;
+    overflow-y: auto;
+}
+
+.container-dashboard-by-member table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.container-dashboard-by-member th, td {
+    padding: 7px;
+    border: 1px solid #6c6f72;
+    font-size: 14px;
+}
+
+.container-dashboard-by-member th{
+    color: #A2A0A2;
+}
+
+.container-dashboard-by-member td{
+    color: #F6F0FC;
+    font-weight: normal;
+    text-align: center;
+    cursor: pointer;
+}
+
+.container-dashboard-by-member td img{
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+}
+
+.container-dashboard-by-member .item-full-name{
+    display: flex;
+    align-items: center;
+    gap: 5px
+}
+
+.container-dashboard-by-member .item-chart{
+    max-width: 220px;
+}
+
+.container-dashboard-by-member .active{
+    background-color: #272e37;
+}

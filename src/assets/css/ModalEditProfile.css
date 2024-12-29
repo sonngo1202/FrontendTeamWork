@@ -8,6 +8,7 @@
     z-index: 1000;
     display: flex; 
     justify-content: center;
+    user-select: none;
 }
 
 .container-modal-edit-profile {
@@ -40,6 +41,7 @@
     background: none;
     padding: 4px 8px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .modal-edit-profile-header button:hover{
@@ -102,6 +104,7 @@
     background-color: #238636;
     color: #F6F0FC;
     border: none;
+    cursor: pointer;
 }
 
 .container-modal-edit-profile .btn-save:hover{

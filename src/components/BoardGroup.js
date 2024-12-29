@@ -7,6 +7,8 @@ import OptionWG from "./OptionWG";
 import { deleteWG } from '../services/workGroupService';
 import Cookies from 'js-cookie';
 import ModalConfirm from "./ModalConfirm";
+import ModalTask from "./ModalTask";
+import OptionTask from "./OptionTask";
 
 const isManagerOfGroup = (user, group) => {
     if (!user || !user.roles || !group) {
@@ -21,15 +23,28 @@ const isManagerOfGroup = (user, group) => {
 const BoardGroup = () => {
     const { group, user, fetchDataGroup } = useOutletContext();
     const navigate = useNavigate();
-    const [isOpenSubTask, setIsOpenSubTask] = useState(false);
+    const [openSubTask, setOpenSubTask] = useState(null);
     const [isWGOpen, setIsWGOpen] = useState(false);
     const [selectedOptionItem, setSelectedOptionItem] = useState(null);
     const [showOption, setShowOption] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
+    const [showActionTask, setShowActionTask] = useState(false);
+    const [selectedWG, setSelectedWG] = useState(null);
+    const [editedTask, setEditedTask] = useState(null);
+    const [selectedParentTask, setSelectedParentTask] = useState(null);
+    const taskRef = useRef(null);
     const itemWGRef = useRef([]);
     const optionWGRef = useRef(null);
 
     const { idTask, idWG, id } = useParams();
+    const [contextMenuTask, setContextMenuTask] = useState({ visible: false, x: 0, y: 0 });
+    const contextMenuTaskRef = useRef(null);
+
+    const handleCallTaskFunction = () => {
+        if (taskRef.current) {
+            taskRef.current.fetchData();
+        }
+    };
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -84,8 +99,12 @@ const BoardGroup = () => {
         return "#A2A0A2";
     };
 
-    const handleOpenListSubTask = () => {
-        setIsOpenSubTask(!isOpenSubTask);
+    const handleOpenListSubTask = (item) => {
+        if(item?.id === openSubTask?.id){
+            setOpenSubTask(null);
+            return;
+        }
+        setOpenSubTask(item);
     }
 
     const handleOpenSubTask = (task, workGroup) => {
@@ -94,7 +113,7 @@ const BoardGroup = () => {
 
     const handleOpenTask = (event, task, workGroup) => {
         const target = event.target;
-        if (target.closest('.board-item-subtask') || target.closest('.board-item-task-count')) {
+        if (target.closest('.board-item-subtask') || target.closest('.board-item-task-count') || target.closest('.add-subtask')) {
             return;
         }
         navigate(`/group/${id}/board/${workGroup.id}/tasks/${task.id}`);
@@ -119,6 +138,36 @@ const BoardGroup = () => {
         }
     }
 
+    const handleOutsideTaskClick = (e) => {
+        if (contextMenuTaskRef.current && !contextMenuTaskRef.current.contains(e.target)) {
+            setContextMenuTask({ ...contextMenuTask, visible: false });
+        }
+    };
+
+    useEffect(() => {
+        if (contextMenuTask.visible) {
+            document.addEventListener("mousedown", handleOutsideTaskClick);
+        } else {
+            document.removeEventListener("mousedown", handleOutsideTaskClick);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideTaskClick);
+        };
+    }, [contextMenuTask.visible]);
+
+    const handleContextMenuTask = (e, itemT, itemWG) => {
+        e.stopPropagation();
+        e.preventDefault();
+        setEditedTask(itemT);
+        setSelectedWG(itemWG.id);
+        setContextMenuTask({
+            visible: true,
+            x: e.pageX,
+            y: e.pageY,
+        });
+    }
+
     return (
         <div className={`container-board ${idTask ? 'selected' : ''}`}>
             {group && group.listWorkGroup && group.listWorkGroup.map((item, index) =>
@@ -132,14 +181,20 @@ const BoardGroup = () => {
                             setSelectedOptionItem(item);
                             setShowOption(true);
                         }}>
-                            <button><i className="fas fa-plus"></i></button>
+                            <button onClick={() => {
+                                setShowActionTask(true);
+                                setSelectedWG(item.id);
+                                setEditedTask(null);
+                                setSelectedParentTask(null);
+                            }}><i className="fas fa-plus"></i></button>
                             <button ref={(el) => itemWGRef.current[index] = el}><i className="fas fa-ellipsis-h"></i></button>
-                            {showOption && selectedOptionItem?.id === item?.id && <OptionWG optionWGRef={optionWGRef} openWG={setIsWGOpen} showConfirm={setShowConfirm} workGroup={selectedOptionItem} deleteWG={deleteWorkGroup}/>}
+                            {showOption && selectedOptionItem?.id === item?.id && <OptionWG optionWGRef={optionWGRef} openWG={setIsWGOpen} showConfirm={setShowConfirm} workGroup={selectedOptionItem} deleteWG={deleteWorkGroup} />}
                         </div>}
                     </div>
                     <div className={`board-item-work-group-content ${item?.listTask.length > 0 ? 'list' : 'empty'}`}>
                         {item?.listTask.length > 0 && item.listTask.map((itemTask =>
-                            <div key={itemTask.id} className={`board-item-task ${String(idTask) === String(itemTask.id) ? 'selected' : ''}`} onClick={(event) => handleOpenTask(event, itemTask, item)}>
+                            <div key={itemTask.id} className={`board-item-task ${String(idTask) === String(itemTask.id) ? 'selected' : ''}`} onClick={(event) => handleOpenTask(event, itemTask, item)}
+                                onContextMenu={(e) => handleContextMenuTask(e, itemTask, item)}>
                                 <div className="board-item-task-title">
                                     <span className={`board-task-status ${itemTask.status.id === 1 ? 'status-in-progress' :
                                         itemTask.status.id === 2 ? 'status-not-started' : 'status-completed'
@@ -161,15 +216,16 @@ const BoardGroup = () => {
                                         />
                                         <span style={{ color: getColor(itemTask) }}>{formatDate(itemTask.endDate)}</span>
                                     </div>
-                                    {itemTask?.listSubTask.length > 0 && (<button className={`board-item-task-count ${isOpenSubTask ? 'selected' : ''}`} onClick={handleOpenListSubTask}>
+                                    {itemTask?.listSubTask.length > 0 && (<button className={`board-item-task-count ${openSubTask?.id === itemTask?.id ? 'selected' : ''}`} onClick={() => handleOpenListSubTask(itemTask)}>
                                         <span>{itemTask.listSubTask.length}</span>
                                         <i className="fas fa-sitemap"></i>
-                                        <i className={`dropdown-icon ${isOpenSubTask ? 'fas fa-caret-down' : 'fa fa-caret-right'}`}></i>
+                                        <i className={`dropdown-icon ${openSubTask?.id === itemTask?.id ? 'fas fa-caret-down' : 'fa fa-caret-right'}`}></i>
                                     </button>)}
                                 </div>
-                                {isOpenSubTask && itemTask.listSubTask.length > 0 && <div className="board-subtask">
+                                {openSubTask?.id === itemTask?.id && itemTask.listSubTask.length > 0 && <div className="board-subtask">
                                     {itemTask.listSubTask.map((itemSubTask =>
-                                        <div key={itemSubTask.id} className={`board-item-subtask ${String(idTask) === String(itemSubTask.id) ? 'selected' : ''}`} onClick={() => handleOpenSubTask(itemSubTask, item)}>
+                                        <div key={itemSubTask.id} className={`board-item-subtask ${String(idTask) === String(itemSubTask.id) ? 'selected' : ''}`} onClick={() => handleOpenSubTask(itemSubTask, item)}
+                                            onContextMenu={(e) => handleContextMenuTask(e, itemSubTask, item)}>
                                             <div className="board-item-subtask-title">
                                                 <span className={`board-subtask-status ${itemSubTask.status.id === 1 ? 'status-in-progress' :
                                                     itemSubTask.status.id === 2 ? 'status-not-started' : 'status-completed'
@@ -185,14 +241,24 @@ const BoardGroup = () => {
                                             </div>
                                         </div>
                                     ))}
-                                    {isManagerOfGroup(user, group) && <button className="add-subtask">
+                                    {isManagerOfGroup(user, group) && <button className="add-subtask" onClick={() => {
+                                        setShowActionTask(true);
+                                        setSelectedWG(item.id);
+                                        setEditedTask(null);
+                                        setSelectedParentTask(itemTask);
+                                    }}>
                                         <i className="fas fa-plus"></i>
                                         <span>Add subtask</span>
                                     </button>}
                                 </div>}
                             </div>
                         ))}
-                        {isManagerOfGroup(user, group) && <button className="add-task">
+                        {isManagerOfGroup(user, group) && <button className="add-task" onClick={() => {
+                            setShowActionTask(true);
+                            setSelectedWG(item.id);
+                            setEditedTask(null);
+                            setSelectedParentTask(null);
+                        }}>
                             <i className="fas fa-plus"></i>
                             <span>Add task</span>
                         </button>}
@@ -206,12 +272,16 @@ const BoardGroup = () => {
                 </button>
                 <div className="board-add-work-group-content"></div>
             </div>}
-            {idTask && (<TaskDetail user={user} id={idTask} idWG={idWG} idG={id} />)}
+            {idTask && (<TaskDetail ref={taskRef} user={user} id={idTask} idWG={idWG} idG={id} fetchDataGroup={fetchDataGroup} group={group} />)}
             {!isManagerOfGroup(user, group) && group?.listWorkGroup.length <= 0 && <div className="board-empty">
                 <span>There are currently no tasks.</span>
             </div>}
             {isWGOpen && (<ModalWorkGroup setClose={setIsWGOpen} group={group} fetchDataGroup={fetchDataGroup} workGroup={selectedOptionItem} />)}
             {showConfirm && <ModalConfirm message={'Warning: This work group contains assigned tasks. Deleting it will result in the removal of all its tasks. Do you want to proceed?'} actionCancel={setShowConfirm} actionConfirm={deleteWorkGroup} />}
+            {showActionTask && <ModalTask setClose={setShowActionTask} group={group} task={editedTask} workGroup={selectedWG} parentTask={selectedParentTask} fetchDataGroup={fetchDataGroup} fetchDataTask={handleCallTaskFunction} />}
+            {contextMenuTask.visible &&
+                <OptionTask contextMenuRef={contextMenuTaskRef} user={user} group={group} workGroup={selectedWG} task={editedTask} contextMenu={contextMenuTask}
+                    setContextMenu={setContextMenuTask} setIsEditTaskOpen={setShowActionTask} fetchDataGroup={fetchDataGroup} idTask={idTask} />}
         </div>
     );
 

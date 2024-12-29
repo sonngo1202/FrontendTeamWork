@@ -1,0 +1,40 @@
+.container-custom-option{
+    display: flex;
+    flex-direction: column;
+    width: 160px; 
+    border: 0.5px solid #6c6f72; 
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #0d1117;
+    padding: 2px 0px;
+    max-height: 300px;
+    overflow-y: auto; 
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    position: absolute;
+    top: 100%; 
+    left: 0;
+    z-index: 1000;
+}
+
+.custom-option-item{
+    padding: 4px 10px;
+}
+
+.custom-option-item span{
+    color: #A2A0A2;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.custom-option-item .active{
+    color: #F6F0FC;
+}
+
+.custom-option-item:hover{
+    background-color: #252c30;
+}
+
+.custom-option-item:hover span{
+    color: #F6F0FC;
+}
+

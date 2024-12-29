@@ -8,6 +8,7 @@
     z-index: 1000;
     display: flex; 
     justify-content: center;
+    user-select: none;
 }
 
 .container-modal-add-member {
@@ -41,6 +42,7 @@
     background: none;
     padding: 4px 8px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .modal-add-member-header button:hover{
@@ -83,12 +85,12 @@
     border-radius: 5px;
     border: 0.5px solid #6c6f72;
     color: #6d6c6d;
-    cursor: pointer;
 }
 
 .action-search .active{
     background-color: #238636;
     color: #F6F0FC;
+    cursor: pointer;
 }
 
 .action-search .active:hover{
@@ -137,6 +139,7 @@
     height: 18px;
     color: #F6F0FC;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 .input-search-user .selected-user .remove-selected:hover{

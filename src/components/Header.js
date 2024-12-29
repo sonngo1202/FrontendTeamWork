@@ -50,9 +50,9 @@ const Header = ({ setIsAuthenticated, user, fetchUserData }) => {
         <h1 className="brand-name">Pandoras</h1>
       </div>
       <div className="search-section">
-        <div className="search-wrapper" onClick={() => setIsSearchOpen(true)}>
+        <div className="search-wrapper">
           <i className="fas fa-search search-icon"></i>
-          <input type="text" placeholder="Search..." className="search-input" value={searchKey} onChange={(e) => setSearchKey(e.target.value)} />
+          <input type="text" placeholder="Search..." className="search-input" value={searchKey} onChange={(e) => setSearchKey(e.target.value)} onClick={() => setIsSearchOpen(true)} />
         </div>
         {isSearchOpen && (<Search searchKey={searchKey} user={user} setIsSearchOpen={setIsSearchOpen} setSearchKey={setSearchKey} />)}
       </div>

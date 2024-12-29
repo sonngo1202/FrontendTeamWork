@@ -9,7 +9,7 @@ const OptionWG = ({ optionWGRef, openWG, showConfirm, workGroup, deleteWG }) => 
     ];
 
     const handleDelete = () => {
-        if (workGroup?.listTask > 0) {
+        if (workGroup.listTask.length > 0) {
             showConfirm(true);
         }else{
             deleteWG();

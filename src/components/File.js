@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAll } from "../services/fileService";
+import { getAll } from "../services/documentService";
 import Cookies from 'js-cookie';
 import { useParams } from "react-router-dom";
 import '../assets/css/File.css';

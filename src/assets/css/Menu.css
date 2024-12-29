@@ -13,6 +13,7 @@
     padding-top: 20px;
     margin-top: 61px;
     z-index: 1000;
+    user-select: none;
 }
 
 .menu-item {
@@ -27,17 +28,18 @@
     color: #F0F6FC;
     font-size: 14px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .button-item{
     background: none;
     border: none;
+    cursor: pointer;
 }
 
 .item-group{
     width: 180px;
     padding: 12px 20px;
-    cursor: pointer;
     border-radius: 10px;
     color: #F0F6FC;
     font-size: 16px;
@@ -46,7 +48,7 @@
 }
 
 .menu-item:hover {
-    background-color: #333;
+    background-color: #272e37;
 }
 
 .menu-item.selected {
@@ -58,6 +60,7 @@
     color: #57606a;
     font-size: 16px;
     transition: color 0.3s ease;
+    cursor: pointer;
 }
 
 .item-group span{

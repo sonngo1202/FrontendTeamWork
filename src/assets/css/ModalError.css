@@ -8,6 +8,7 @@
     z-index: 1000;
     display: flex;
     justify-content: center;
+    user-select: none;
 }
 
 .container-modal-error {

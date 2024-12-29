@@ -8,6 +8,7 @@
     z-index: 1000;
     display: flex; 
     justify-content: center;
+    user-select: none;
 }
 
 .container-modal-work-group {
@@ -40,6 +41,7 @@
     background: none;
     padding: 4px 8px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .modal-work-group-header button:hover{
