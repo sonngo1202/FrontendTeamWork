@@ -10,8 +10,8 @@ import { upload, deleteF } from '../services/documentService';
 import ModalError from './ModalError';
 import OptionTask from './OptionTask';
 import ModalConfirm from './ModalConfirm';
-import ModalMemberComment from './ModalMemberComment';
-import { filter } from 'd3';
+import { Mention, MentionsInput } from 'react-mentions';
+import { add } from '../services/commentService';
 
 const isManagerOfGroup = (user, group) => {
     if (!user || !user.roles || !group) {
@@ -114,34 +114,6 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
                 txtWindow.focus();
             }
         }
-    };
-
-    const processContent = (comment) => {
-        let words = comment?.content.split(' ');
-        comment?.listTag.sort((a, b) => b.position - a.position);
-
-        comment?.listTag.forEach(tag => {
-            const position = parseInt(tag?.position, 10);
-            const userName = tag?.user.fullName;
-            const userImage = tag?.user.picture;
-
-            const link = `
-                <a href="#">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/datn-5ae48.appspot.com/o/${userImage}?alt=media" alt="${userName}" />
-                    <span>${userName}</span>
-                </a>
-            `;
-
-            words.splice(position, 0, link);
-        });
-
-        return words.map(word => {
-            if (word.startsWith('<a') && word.endsWith('</a>')) {
-                return word;
-            } else {
-                return `<span>${word}</span>`;
-            }
-        }).join(' ');
     };
 
     useEffect(() => {
@@ -298,97 +270,118 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
         setShowConfirm(true);
     }
 
-    const [content, setContent] = useState('');
-    const [tags, setTags] = useState([]);
-    const [isShowMember, setIsShowMember] = useState(false);
-    const [filteredMembers, setFilteredMembers] = useState([]);
-    const [yComment, setYComment] = useState(null);
-    const [keyComment, setKeyComment] = useState('');
-    const commentRef = useRef(null);
+    const [comment, setComment] = useState('');
+    const [mentionMembers, setMentionMembers] = useState([]);
 
     useEffect(() => {
-        const filtered = group?.listUserGroup.filter((member) =>
-            removeAccents(member.user.fullName).includes(removeAccents(keyComment))
-        );
-        setFilteredMembers(filtered);
-    }, [group, keyComment])
+        if (group && user) {
+            setMentionMembers(
+                group?.listUserGroup
+                    .filter((ug) => ug.user.id !== user?.id)
+                    .map((ug) => ({
+                        id: ug.user.id,
+                        display: ug.user.fullName,
+                        avatar: ug.user.picture,
+                        email: ug.user.email
+                    }))
+            );
+        }
+    }, [group, user]);
 
-    const removeAccents = (str) => {
-        return str
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/đ/g, "d")
-            .replace(/Đ/g, "D")
-            .toLowerCase();
+    const renderSuggestion = (entry, search, highlightedDisplay, index) => {
+        return (
+            <div key={entry.id} className="mention-suggestion">
+                <img src={`https://firebasestorage.googleapis.com/v0/b/datn-5ae48.appspot.com/o/${entry.avatar}?alt=media`} alt={entry.display} className="mention-avatar" />
+                <div className='mention-suggestion-item'>
+                    <span className='mention-suggestion-name'>{highlightedDisplay}</span>
+                    <span className='mention-suggestion-email'>{entry.email}</span>
+                </div>
+            </div>
+        );
     }
 
-    const handleCommentInput = (e) => {
-        const text = e.target.textContent;
-        if (text.includes('@')) {
-            setIsShowMember(true);
-            const lastWord = text.split('@').pop();
-            if (lastWord.startsWith(' ')) {
-                setIsShowMember(false);
-            } else {
-                setIsShowMember(true);
-                setKeyComment(lastWord);
+    const addComment = async (accessToken, content, listTag) => {
+        if (accessToken) {
+            try {
+                const rs = await add(task?.id, idWG, group?.id, content, listTag, accessToken);
+            } catch (error) {
+                console.error("Failed to add comment:", error);
             }
-        } else {
-            setIsShowMember(false);
-            setContent(text);
         }
+    }
+
+    const handleAddComment = () => {
+        const mentions = [];
+        const regex = /@\[(.+?)\]\((.+?)\)/g;
+        let match;
+        let x = 0;
+        while ((match = regex.exec(comment)) !== null) {
+            let s = match.index - x;
+            x += 6;
+            let e = regex.lastIndex - x
+            mentions.push({
+                user: { id: match[2] },
+                start: s,
+                end: e,
+            });
+        }
+
+        console.log(comment.replace(/@\[(.+?)\]\((.+?)\)/g, "$1"))
+        console.log(mentions)
+
+        const accessToken = Cookies.get('accessToken');
+        addComment(accessToken, comment.replace(/@\[(.+?)\]\((.+?)\)/g, "$1"), mentions)
+            .then(() => {
+                return fetchData();
+            })
+            .catch((error) => {
+                console.error("Failed to upload file:", error);
+            });
+        setComment('');
+    }
+
+    const commentDisplay = (item) => {
+        let formattedComment = item.content;
+        let lengthDelta = 0;
+
+        item?.listTag.forEach((mention) => {
+            const adjustedStart = mention.start + lengthDelta;
+            const adjustedEnd = mention.end + lengthDelta;
+
+            const beforeMention = formattedComment.substring(0, adjustedStart);
+            const mentionText = formattedComment.substring(adjustedStart, adjustedEnd);
+            const afterMention = formattedComment.substring(adjustedEnd);
+
+            const linkedMention = `<a href="#" style="color:#007BFF;">@${mentionText}</a>`;
+
+            formattedComment = beforeMention + linkedMention + afterMention;
+
+            lengthDelta += linkedMention.length - mentionText.length;
+        });
+
+        return formattedComment;
     };
 
-    const handleMemberSelect = (member) => {
-        const selection = window.getSelection();
-        const container = commentRef.current;
+    const formatTimeDifference = (inputDate) => {
+        const now = new Date();
+        const input = new Date(inputDate);
 
-        container.textContent = "";
+        const difference = now.getTime() - input.getTime();
 
-        const span = document.createElement("span");
-        span.style.textDecoration = "none";
-        span.style.backgroundColor = "#0d1117";
-        span.style.display = "inline-flex";
-        span.style.alignItems = "center";
-        span.style.gap = "5px";
-        span.style.paddingRight = "5px";
-        span.style.borderRadius = "5px";
-        span.style.color = "#F0F6FC";
-
-        const img = document.createElement("img");
-        img.src = `https://firebasestorage.googleapis.com/v0/b/datn-5ae48.appspot.com/o/${member.user.picture}?alt=media`;
-        img.alt = member.user.fullName;
-        img.style.width = "22px";
-        img.style.height = "22px";
-        img.style.borderRadius = "0";
-
-        const name = document.createElement("span");
-        name.textContent = member.user.fullName;
-
-        span.appendChild(img);
-        span.appendChild(name);
-
-        const remainingText = document.createTextNode(content);
-        container.appendChild(remainingText);
-        container.appendChild(span);
-
-        setTags((prevTags) => [
-            ...prevTags,
-            { user: member.user, position: tags.length + content.split(' ').length },
-        ]);
-        setIsShowMember(false);
-        setKeyComment("");
-
-        setTimeout(() => {
-            const newRange = document.createRange();
-            newRange.setStart(container, container.childNodes.length);  
-            newRange.setEnd(container, container.childNodes.length); 
-
-            selection.removeAllRanges();
-            selection.addRange(newRange);  
-        }, 0);  
-    };
-
+        if (difference > 24 * 60 * 60 * 1000) {
+            const options = { day: '2-digit', month: 'short', year: 'numeric' };
+            return input.toLocaleDateString('en-US', options);
+        } else if (difference > 60 * 60 * 1000) {
+            const hours = Math.floor(difference / (60 * 60 * 1000));
+            return `${hours}h ago`;
+        } else if (difference > 60 * 1000) {
+            const minutes = Math.floor(difference / (60 * 1000));
+            return `${minutes}m ago`;
+        } else {
+            const seconds = Math.floor(difference / 1000);
+            return `${seconds}s ago`;
+        }
+    }
 
     return (
         <div className='container-task-detail'>
@@ -506,18 +499,21 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
                     {task?.listComment.length > 0 ? (
                         <div className='task-detail-list-comment'>
                             {task?.listComment.map((item) =>
-                                <div key={item?.id} className='task-detail-item-comment'>
-                                    <div className='task-detail-item-comment-creator'>
-                                        <img
-                                            src={`https://firebasestorage.googleapis.com/v0/b/datn-5ae48.appspot.com/o/${item?.creator.picture}?alt=media`}
-                                            alt="Avatar"
-                                        />
+                                <div key={item?.id} className='task-detail-item-comment-container'>
+                                    <div className='task-detail-item-comment'>
+                                        <div className='task-detail-item-comment-creator'>
+                                            <img
+                                                src={`https://firebasestorage.googleapis.com/v0/b/datn-5ae48.appspot.com/o/${item?.creator.picture}?alt=media`}
+                                                alt="Avatar"
+                                            />
+                                        </div>
+                                        <div className='task-detail-item-comment-content'>
+                                            <span className='task-detail-item-comment-content-top'>{item?.creator.fullName} <span className='time'>● {formatTimeDifference(item.updateAt)}</span></span>
+                                            <div className='task-detail-item-comment-content-bottom'
+                                                dangerouslySetInnerHTML={{ __html: commentDisplay(item) }} />
+                                        </div>
                                     </div>
-                                    <div className='task-detail-item-comment-content'>
-                                        <span className='task-detail-item-comment-content-top'>{item?.creator.fullName}</span>
-                                        <div className='task-detail-item-comment-content-bottom'
-                                            dangerouslySetInnerHTML={{ __html: processContent(item) }} />
-                                    </div>
+                                    <button><i className='fas fa-ellipsis-h'></i></button>
                                 </div>
                             )}
                         </div>
@@ -533,13 +529,12 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
                     src={`https://firebasestorage.googleapis.com/v0/b/datn-5ae48.appspot.com/o/${user?.picture}?alt=media`}
                     alt="Avatar"
                 />
-                <div className={`add-comment`} >
-                    <p ref={commentRef} spellCheck={false} contentEditable onInput={handleCommentInput} suppressContentEditableWarning ></p>
-                    {isShowMember && <ModalMemberComment data={filteredMembers} y={yComment} setSelected={handleMemberSelect} />}
-                </div>
-
+                <MentionsInput className='mention-input' spellCheck={false} value={comment} onChange={(e) => setComment(e.target.value)} placeholder='Enter your comment'>
+                    <Mention
+                        trigger="@" data={mentionMembers} renderSuggestion={renderSuggestion} className='mention' />
+                </MentionsInput>
             </div>
-            <div className='btn-add-comment'><div></div><button>Send</button></div>
+            <div onClick={handleAddComment} className={`btn-add-comment ${comment ? 'active' : ''}`}><div></div><button>Send</button></div>
             {isModalTaskOpen && <ModalTask setClose={setIsModalTaskOpen} group={group} task={editedTask} workGroup={idWG} parentTask={parentTask} fetchDataGroup={fetchDataGroup} fetchDataTask={fetchData} />}
             {showErr && <ModalError error={'Currently, only PDF and TXT files are supported.'} setClose={setShowErr} />}
             {contextMenuTask.visible &&

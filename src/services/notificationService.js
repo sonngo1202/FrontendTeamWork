@@ -50,7 +50,7 @@ export const maskNotifiAsRead = async (id , idU, accessToken) => {
         if (!response.ok) {
             throw new Error('Đã có lỗi xảy ra, vui lòng thử lại');
         }
-        const data = await response.json();
+        const data = await response.text();
         return data;
     } catch (error) {
         throw new Error(error.message || 'Không thể kết nối với server');
