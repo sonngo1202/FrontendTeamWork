@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import '../assets/css/Group.css';
 import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import Cookies from 'js-cookie';
 import { detail } from '../services/groupService'
+import Filter from "./Filter";
 
 const isManagerOfGroup = (user, group) => {
     if (!user || !user.roles) {
@@ -27,17 +28,23 @@ const Group = () => {
     const [isManager, setIsManager] = useState(false);
     const isDashboardPage = location.pathname.includes('/dashboard');
     const [typeDashboard, setTypeDashboard] = useState(((location.pathname.includes('/dashboard') && !location.pathname.includes('/dashboard/by-member')) || location.pathname.includes('/dashboard/by-status')) ? 1 : 2);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [isSortOpen, setIsSortOpen] = useState(false);
+    const filterRef = useRef(null);
+    const sortRef = useRef(null);
+    const [selectedFilterStatus, setSelectedFilterStatus] = useState(null);
+    const [selectedFilterPriority, setSelectedFilterPriority] = useState(null);
+    const [selectedFilterAssignee, setSelectedFilterAssignee] = useState(null);
+    const [selectedFilterStart, setSelectedFilterStart] = useState(null);
+    const [selectedFilterEnd, setSelectedFilterEnd] = useState(null);
+    const [listWG, setListWG] = useState([]);
+    const [totalFilter, setTotalFilter] = useState(0);
 
     const groupItems = [
         { name: "Overview", icon: "fas fa-clipboard-list", path: `/group/${groupId}/overview`, isDisplay: true },
         { name: "Board", icon: "fas fa-columns", path: `/group/${groupId}/board`, isDisplay: true },
         { name: "Dashboard", icon: "fas fa-project-diagram", path: `/group/${groupId}/dashboard`, isDisplay: isManager },
         { name: "File", icon: "fas fa-file-alt", path: `/group/${groupId}/file`, isDisplay: true }
-    ];
-
-    const optionItems = [
-        { name: "Filter", icon: "fas fa-filter" },
-        { name: "Sort", icon: "fas fa-sort" }
     ];
 
     const handleSelectGroupClick = (item) => {
@@ -59,6 +66,11 @@ const Group = () => {
 
     useEffect(() => {
         fetchDataGroup();
+        setSelectedFilterStatus(null);
+        setSelectedFilterPriority(null);
+        setSelectedFilterAssignee(null);
+        setSelectedFilterStart(null);
+        setSelectedFilterEnd(null);
     }, [groupId]);
 
     useEffect(() => {
@@ -72,6 +84,127 @@ const Group = () => {
         }
         setTypeDashboard(((location.pathname.includes('/dashboard') && !location.pathname.includes('/dashboard/by-member')) || location.pathname.includes('/dashboard/by-status')) ? 1 : 2);
     }, [location]);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            const isClickOutsideFilter = filterRef.current && !filterRef.current.contains(e.target);
+            const isClickOutsideSort = sortRef.current && !sortRef.current.contains(e.target);
+
+            if (isClickOutsideFilter && isClickOutsideSort) {
+                setIsFilterOpen(false);
+                setIsSortOpen(false);
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
+    useEffect(() => {
+        let listFilter = group?.listWorkGroup;
+        let countFilter = 0;
+
+        if (selectedFilterStatus) {
+            const filteredGroup = listFilter.map(wg => {
+                const tasks = wg.listTask.filter(task => task.status.id === selectedFilterStatus.id);
+                return {
+                    ...wg,
+                    listTask: tasks.length > 0 ? tasks : []
+                };
+            });
+            listFilter = filteredGroup;
+            countFilter += 1;
+        }
+        if (selectedFilterPriority) {
+            const filteredGroup = listFilter.map(wg => {
+                const tasks = wg.listTask.filter(task => task.priorityLevel.id === selectedFilterPriority.id);
+                return {
+                    ...wg,
+                    listTask: tasks.length > 0 ? tasks : []
+                };
+            });
+            listFilter = filteredGroup;
+            countFilter += 1;
+        }
+        if (selectedFilterAssignee) {
+            const filteredGroup = listFilter.map(wg => {
+                const tasks = wg.listTask.filter(task => task.assignee.id === selectedFilterAssignee.id);
+                return {
+                    ...wg,
+                    listTask: tasks.length > 0 ? tasks : []
+                };
+            });
+            listFilter = filteredGroup;
+            countFilter += 1;
+        }
+        if (selectedFilterStart?.startDay || selectedFilterStart?.endDay) {
+            const filteredGroup = listFilter.map(wg => {
+                const tasks = wg.listTask.filter(task => {
+                    const taskStartDate = new Date(task.startDate).setHours(0, 0, 0, 0);
+                    const filterStartDate = selectedFilterStart?.startDay
+                        ? new Date(selectedFilterStart.startDay).setHours(0, 0, 0, 0)
+                        : null;
+                    const filterEndDate = selectedFilterStart?.endDay
+                        ? new Date(selectedFilterStart.endDay).setHours(0, 0, 0, 0)
+                        : null;
+
+                    return (
+                        (!filterStartDate || taskStartDate >= filterStartDate) &&
+                        (!filterEndDate || taskStartDate <= filterEndDate)
+                    );
+                });
+
+                return {
+                    ...wg,
+                    listTask: tasks.length > 0 ? tasks : [],
+                };
+            });
+            listFilter = filteredGroup;
+            countFilter += 1;
+        }
+        if (selectedFilterEnd?.startDay || selectedFilterEnd?.endDay) {
+            const filteredGroup = listFilter.map(wg => {
+                const tasks = wg.listTask.filter(task => {
+                    const taskEndDate = new Date(task.endDate).setHours(0, 0, 0, 0);
+                    const filterStartDate = selectedFilterEnd?.startDay
+                        ? new Date(selectedFilterEnd.startDay).setHours(0, 0, 0, 0)
+                        : null;
+                    const filterEndDate = selectedFilterEnd?.endDay
+                        ? new Date(selectedFilterEnd.endDay).setHours(0, 0, 0, 0)
+                        : null;
+
+                    return (
+                        (!filterStartDate || taskEndDate >= filterStartDate) &&
+                        (!filterEndDate || taskEndDate <= filterEndDate)
+                    );
+                });
+
+                return {
+                    ...wg,
+                    listTask: tasks.length > 0 ? tasks : [],
+                };
+            });
+            listFilter = filteredGroup;
+            countFilter += 1;
+        }
+
+        setListWG(listFilter);
+        setTotalFilter(countFilter);
+
+    }, [group, selectedFilterStatus, selectedFilterPriority, selectedFilterAssignee, selectedFilterStart, selectedFilterEnd]);
+
+    const handleClearFilter = (e) => {
+        e.stopPropagation();
+        setSelectedFilterStatus(null);
+        setSelectedFilterPriority(null);
+        setSelectedFilterAssignee(null);
+        setSelectedFilterStart(null);
+        setSelectedFilterEnd(null);
+        setIsFilterOpen(false);
+    }
 
     return (
         <div className="container-group">
@@ -93,12 +226,26 @@ const Group = () => {
             </div>
             {isBoardPage && (
                 <div className="group-filter">
-                    {optionItems.map((item) =>
-                        <button key={item.name} >
-                            <i className={`fas ${item.icon}`}></i>
-                            <span>{item.name}</span>
+                    <div key={"filter"} className={`group-filter-item ${totalFilter > 0 ? 'active' : ''}`} ref={filterRef}>
+                        <button onClick={() => { setIsFilterOpen(true); setIsSortOpen(false) }} >
+                            <i className={`fas fa-filter`}></i>
+                            <span>Filter</span>
+                            {totalFilter > 0 && (<span>{totalFilter}</span>)}
+                            {totalFilter > 0 && (<i className='fas fa-times' onClick={(e) => handleClearFilter(e)}></i>)}
                         </button>
-                    )}
+                        {isFilterOpen && <Filter status={selectedFilterStatus} setStatus={setSelectedFilterStatus}
+                            priority={selectedFilterPriority} setPriority={setSelectedFilterPriority}
+                            assignee={selectedFilterAssignee} setAssignee={setSelectedFilterAssignee}
+                            start={selectedFilterStart} setStart={setSelectedFilterStart}
+                            end={selectedFilterEnd} setEnd={setSelectedFilterEnd}
+                            member={group?.listUserGroup} />}
+                    </div>
+                    <div key={"sort"} className="group-filter-item" ref={sortRef}>
+                        <button onClick={() => { setIsSortOpen(true); setIsFilterOpen(false) }} >
+                            <i className={`fas fa-sort`}></i>
+                            <span>Sort</span>
+                        </button>
+                    </div>
                 </div>
             )}
             {isDashboardPage && (
@@ -107,7 +254,7 @@ const Group = () => {
                     <button className={`${typeDashboard === 2 ? 'selected' : ''}`} onClick={() => { setTypeDashboard(2); navigate(`/group/${groupId}/dashboard/by-member`) }}>By Member</button>
                 </div>
             )}
-            <Outlet context={{ group, user, fetchUserData, fetchDataGroup }} />
+            <Outlet context={{ group, user, fetchUserData, fetchDataGroup, listWG }} />
         </div>
     );
 };

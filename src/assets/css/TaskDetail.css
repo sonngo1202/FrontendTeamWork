@@ -444,7 +444,7 @@
     overflow-y: auto !important;
 }
 
-.task-detail-add-comment .mention-input {
+.mention-input {
     width: 100%;
     height: 120px;
     border-radius: 5px;
@@ -598,8 +598,13 @@
     transition: box-shadow 0.3s ease;
 }
 
-.task-detail-item-comment-container button {
+.task-detail-item-comment-container .btn-option-comment{
+    position: relative;
     height: 20px;
+}
+
+.task-detail-item-comment-container button {
+    height: 100%;
     background-color: #151B23;
     border: none;
     color: #A2A0A2;
@@ -610,3 +615,50 @@
 .task-detail-item-comment-container button:hover{
     background-color: #272e37;
 }
+
+.option-comment-container{
+    display: flex;
+    flex-direction: column;
+    width: 160px; 
+    border: 0.5px solid #6c6f72; 
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #0d1117;
+    padding: 2px 0px;
+    max-height: 300px;
+    overflow-y: auto; 
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    position: absolute;
+    top: 100%; 
+    right: 0;
+    z-index: 1000;
+}
+
+.option-comment-item{
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.option-comment-item span{
+    color: #A2A0A2;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.option-comment-item:hover{
+    background-color: #252c30;
+}
+
+.option-comment-item:hover span{
+    color: #F6F0FC;
+}
+
+.option-comment-item.delete span{
+    color: #d1395a;
+}
+
+.option-comment-item.delete:hover span{
+    color: #da3c5e;
+}
+
+

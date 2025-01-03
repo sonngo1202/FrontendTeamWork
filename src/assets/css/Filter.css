@@ -1,0 +1,276 @@
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    width: 640px;
+    border: 0.5px solid #6c6f72;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #0d1117;
+    height: 410px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1000;
+}
+
+.filter-header{
+    margin: 16px 24px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-header span{
+    font-size: 14px;
+    font-weight: 500;
+    color: #F6F0FC;
+}
+
+.filter-header button{
+    color: #6A696A;
+    font-size: 12px;
+    cursor: auto;
+    background: none;
+}
+
+.filter-header button:hover{
+    background: none;
+}
+
+.filter-header .active{
+    color: #F6F0FC;
+    cursor: pointer;
+}
+
+.filter-header .active:hover{
+    background-color: #272e37;
+}
+
+.filter-content{
+    padding: 8px 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.filter-content span{
+    color: #A2A0A2;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.filter-by-status-content{
+    display: flex;
+    gap: 12px;
+}
+
+.filter-by-status-item {
+    display: flex;
+    align-items: center;
+    border: 0.5px solid #6c6f72;
+    padding: 4px 15px;
+    border-radius: 16px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+.filter-by-status-item span{
+    color: #A2A0A2;
+}
+
+.filter-by-status-item i {
+    font-size: 12px;
+    color: #0d1117;
+    background-color: #A2A0A2;
+    border: 0.5px solid #A2A0A2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; 
+}
+
+.filter-by-status-item.active{
+    background-color: #2A3C68;
+    border: 0.5px solid transparent;
+}
+
+.filter-by-status-item.active span{
+    color: #689Af3;
+}
+
+.filter-by-status-item.active i{
+    color: #689Af3;
+    border: 0.5px solid transparent;
+    background-color: #2A3C68;
+}
+
+.filter-by-status-item.active:hover{
+    background-color: #172237;
+}
+
+.filter-by-status-item.active:hover span{
+    color: #689Af3;
+}
+
+.filter-by-status-item.active:hover i{
+    color: #689Af3;
+    border: 0.5px solid transparent;
+    background-color: #172237;
+}
+
+.filter-by-status-item:hover{
+    background-color: #272e37;
+}
+
+.filter-by-status-item:hover span{
+    color: #F6F0FC;
+}
+
+.filter-by-status-item:hover i{
+    background-color: #F6F0FC;
+}
+
+.filter-by-assignee-content{
+    position: relative;
+}
+
+.filter-by-assignee-content button{
+    display: flex;
+    align-items: center;
+    border: 0.5px solid #6c6f72;
+    padding: 7px 15px;
+    border-radius: 16px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+.filter-by-assignee-content button i{
+    font-size: 12px !important;
+    color: #A2A0A2 !important;
+}
+
+.filter-by-assignee-content button span{
+    color: #A2A0A2 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+}
+
+.filter-by-assignee-content button:hover{
+    background-color: #272e37 !important;
+}
+
+.filter-by-assignee-content button:hover span{
+    color: #F6F0FC !important;
+}
+
+.filter-by-assignee-content button:hover i{
+    color: #F6F0FC !important;
+}
+
+.assignee-filter-info{
+    display: flex;
+    align-items: center;
+    border: 0.5px solid #6c6f72;
+    padding: 4px 15px;
+    border-radius: 16px;
+    margin-top: 8px;
+    cursor: pointer;
+    justify-content: space-between;
+    width: 160px;
+}
+
+.assignee-filter-info-left{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.assignee-filter-info-left img{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.assignee-filter-info:hover{
+    background-color: #272e37;
+}
+
+.assignee-filter-info:hover span{
+    color: #F6F0FC;
+}
+
+.assignee-filter-info:hover i{
+    color: #F6F0FC;
+}
+
+.assignee-filter-info-right i:hover{
+    color: #d1395a;
+}
+
+.filter-by-start-date-content{
+    display: flex;
+    gap: 12px;
+    position: relative;
+}
+
+.filter-by-start-date-content button{
+    display: flex;
+    align-items: center;
+    border: 0.5px solid #6c6f72;
+    padding: 7px 15px;
+    border-radius: 16px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+.filter-by-start-date-content button i{
+    font-size: 12px !important;
+    color: #A2A0A2 !important;
+}
+
+.filter-by-start-date-content button span{
+    color: #A2A0A2 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+}
+
+.filter-by-start-date-content button:hover{
+    background-color: #272e37 !important;
+}
+
+.filter-by-start-date-content button:hover span{
+    color: #F6F0FC !important;
+}
+
+.filter-by-start-date-content button:hover i{
+    color: #F6F0FC !important;
+}
+
+.filter-by-start-date-content .form-start-date{
+    display: flex;
+    align-items: center;
+    border: 0.5px solid #6c6f72;
+    padding: 6px 15px;
+    border-radius: 16px;
+    margin-top: 8px;
+    cursor: pointer;
+    width: 90px;
+    justify-content: space-between;
+}
+
+.filter-by-start-date-content .form-start-date:hover{
+    background-color: #272e37;
+}
+
+.filter-by-start-date-content .form-start-date:hover span{
+    color: #F6F0FC;
+}
+
+.filter-by-start-date-content .form-start-date:hover i{
+    color: #F6F0FC;
+}
+
+.filter-by-start-date-content .form-start-date i:hover{
+    color: #d1395a;
+}

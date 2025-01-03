@@ -160,7 +160,7 @@ const DatePicker = ({ date, setDate }) => {
                     {weekOfMonth.map((itemW, index) =>
                         <div key={index} className='data-picker-content-main-item'>
                             {itemW.map((itemD, index) =>
-                                <div key={index} className={`data-picker-item-wrap ${itemD.isCurrently ? 'active' : ''} ${itemD.isSelected ? 'selected' : ''}`} onClick={() => setDate(itemD.value)}>
+                                <div key={index} className={`data-picker-item-wrap ${itemD.isCurrently ? 'active' : ''} ${itemD.isSelected ? 'selected' : ''}`} onClick={() => {setDate(itemD.value); setInputDate(convertDateToDDMMYYYY(itemD.value))}}>
                                     <span className={`${itemD.isDateBeforeToday ? 'active' : ''}`}>{itemD.name}</span>
                                 </div>
                             )}

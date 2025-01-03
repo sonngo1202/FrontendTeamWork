@@ -11,7 +11,8 @@ import ModalError from './ModalError';
 import OptionTask from './OptionTask';
 import ModalConfirm from './ModalConfirm';
 import { Mention, MentionsInput } from 'react-mentions';
-import { add } from '../services/commentService';
+import { add, deleteC } from '../services/commentService';
+import EditComment from './EditComment';
 
 const isManagerOfGroup = (user, group) => {
     if (!user || !user.roles || !group) {
@@ -271,6 +272,7 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
     }
 
     const [comment, setComment] = useState('');
+    const commentRefs = useRef({});
     const [mentionMembers, setMentionMembers] = useState([]);
 
     useEffect(() => {
@@ -310,6 +312,16 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
         }
     }
 
+    const deleteComment = async (accessToken) => {
+        if (accessToken) {
+            try {
+                const rs = await deleteC(task?.id, idWG, group?.id, selectedComment?.id, accessToken);
+            } catch (error) {
+                console.error("Failed to add comment:", error);
+            }
+        }
+    }
+
     const handleAddComment = () => {
         const mentions = [];
         const regex = /@\[(.+?)\]\((.+?)\)/g;
@@ -326,9 +338,6 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
             });
         }
 
-        console.log(comment.replace(/@\[(.+?)\]\((.+?)\)/g, "$1"))
-        console.log(mentions)
-
         const accessToken = Cookies.get('accessToken');
         addComment(accessToken, comment.replace(/@\[(.+?)\]\((.+?)\)/g, "$1"), mentions)
             .then(() => {
@@ -338,6 +347,17 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
                 console.error("Failed to upload file:", error);
             });
         setComment('');
+    }
+
+    const handleDeleteComment = () => {
+        const accessToken = Cookies.get('accessToken');
+        deleteComment(accessToken)
+            .then(() => {
+                return fetchData();
+            })
+            .catch((error) => {
+                console.error("Failed to upload file:", error);
+            });
     }
 
     const commentDisplay = (item) => {
@@ -381,6 +401,29 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
             const seconds = Math.floor(difference / 1000);
             return `${seconds}s ago`;
         }
+    }
+
+    const [selectedComment, setSelectedComment] = useState(null);
+    const [showEditComment, setShowEditComment] = useState(false);
+
+    const optionsComment = [
+        { name: 'Edit comment', id: 1, onClick: () => setShowEditComment(true) },
+        { name: 'Delete comment', id: 2, color: 'red', onClick: () => handleDeleteComment() }
+    ];
+
+    const handleShowOptionComment = (item) => {
+        if(item.id != selectedComment?.id){
+            setSelectedComment(item);
+        }else if(selectedComment != null){
+            setSelectedComment(null);
+        }else{
+            setSelectedComment(item);
+        }
+    }
+
+    const handleCloseEditCommet = () =>{
+        setShowEditComment(false);
+        setSelectedComment(null);
     }
 
     return (
@@ -513,7 +556,16 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
                                                 dangerouslySetInnerHTML={{ __html: commentDisplay(item) }} />
                                         </div>
                                     </div>
-                                    <button><i className='fas fa-ellipsis-h'></i></button>
+                                    {item.creator.id === user?.id && <div className='btn-option-comment' ref={commentRefs.current[item.id]}>
+                                        <button onClick={() => handleShowOptionComment(item)}><i className='fas fa-ellipsis-h'></i></button>
+                                        {(selectedComment?.id === item.id) && (<div className='option-comment-container'>
+                                            {optionsComment.map((option, index) =>
+                                                <div key={index} className={`option-comment-item ${option.color ? 'delete' : ''}`} onClick={option.onClick}>
+                                                    <span>{option.name}</span>
+                                                </div>
+                                            )}
+                                        </div>)}
+                                    </div>}
                                 </div>
                             )}
                         </div>
@@ -541,6 +593,7 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
                 <OptionTask contextMenuRef={contextMenuTaskRef} user={user} group={group} workGroup={idWG} task={editedTask} contextMenu={contextMenuTask}
                     setContextMenu={setContextMenuTask} setIsEditTaskOpen={setIsModalTaskOpen} fetchDataGroup={fetchDataGroup} fetchDataTask={fetchData} idTask={idTask} />}
             {showConfirm && <ModalConfirm actionCancel={setShowConfirm} actionConfirm={actionDeleteFile} message={'Do you want to delete this file?'} />}
+            {showEditComment && <EditComment setClose={handleCloseEditCommet} comment={selectedComment} members={mentionMembers} renderSuggestion={renderSuggestion} idTask={task?.id} idWG={idWG} idG={group?.id} fetchData={fetchData} />}
         </div>
     );
 });

@@ -116,6 +116,35 @@
     transition: box-shadow 0.2s ease;
 }
 
+.group-filter-item{
+    position: relative;
+    border-radius: 5px;
+}
+
+.group-filter-item.active{
+    background-color: #1A2843;
+}
+
+.group-filter-item.active button span{
+    color: #5688E5;
+}
+
+.group-filter-item.active button i{
+    color: #5688E5;
+}
+
+.group-filter-item.active button:hover{
+    background-color: #172237;
+}
+
+.group-filter-item.active button:hover span{
+    color: #5688E5;
+}
+
+.group-filter-item.active button:hover i{
+    color: #5688E5;
+}
+
 .group-filter button {
     display: flex;
     align-items: center;
@@ -123,7 +152,8 @@
     background:none;
     border: none;
     padding: 6px 8px;
-    border-radius: 10px;
+    border-radius: 5px;
+    gap: 5px;
 }
 
 .group-filter button:hover {
