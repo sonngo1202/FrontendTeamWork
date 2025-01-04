@@ -60,7 +60,9 @@ const Filter = ({ status, setStatus, priority, setPriority, assignee, setAssigne
     const handleClear = () => {
         setStatus(null);
         setPriority(null);
-        setAssignee(null);
+        if (member) {
+            setAssignee(null);
+        }
         setStart(null);
         setEnd(null);
         setStartS(null);

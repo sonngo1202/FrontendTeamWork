@@ -1,0 +1,230 @@
+.sort-container-empty {
+    top: 100%;
+    right: 0;
+    position: absolute;
+    background-color: #0d1117;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 0.1px solid #6c6f72;
+    border-radius: 5px;
+    padding: 5px 0;
+    z-index: 1000;
+    width: 160px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.sort-container {
+    top: 100%;
+    right: 0;
+    position: absolute;
+    background-color: #0d1117;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 0.1px solid #6c6f72;
+    border-radius: 5px;
+    padding: 5px 0;
+    z-index: 1000;
+    width: 450px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.sort-empty-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 20px;
+}
+
+.sort-empty-item i {
+    font-size: 14px !important;
+    color: #F6F0FC !important;
+}
+
+.sort-empty-item span {
+    font-size: 14px !important;
+    color: #F6F0FC !important;
+    font-weight: 500 !important;
+}
+
+.sort-empty-item:hover {
+    background-color: #272e37;
+}
+
+
+.sort-header {
+    margin: 16px 24px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sort-header span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #F6F0FC;
+}
+
+.sort-header button {
+    color: #F6F0FC;
+    font-size: 12px;
+    cursor: pointer;
+    background: none;
+}
+
+.sort-header button:hover {
+    background-color: #272e37;
+}
+
+.sort-content {
+    padding: 8px 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sort-content span{
+    color: #F6F0FC !important;
+    font-size: 14px !important;
+}
+
+.sort-content i{
+    font-size: 14px !important;
+    color: #A2A0A2 !important;
+}
+
+.sort-content-item{
+    display: flex;
+    align-items: center;
+    gap: 2%;
+}
+
+.item-sort-name{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    border: 0.5px solid #6c6f72;
+    padding: 3px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.item-sort-name.active{
+    background-color: #272e37;
+}
+
+.item-sort-name.active i{
+    color: #F6F0FC !important;
+}
+
+.item-sort-name:hover{
+    background-color: #272e37;
+}
+
+.item-sort-name:hover i{
+    color: #F6F0FC !important;
+}
+
+.item-sort-name-left{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.item-sort-order{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 30%;
+    border: 0.5px solid #6c6f72;
+    padding: 3px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.item-sort-order.active{
+    background-color: #272e37;
+}
+
+.item-sort-order.active i{
+    color: #F6F0FC !important;
+}
+
+.item-sort-order-left{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.item-sort-order:hover{
+    background-color: #272e37;
+}
+
+.item-sort-order:hover i{
+    color: #F6F0FC !important;
+}
+
+.sort-content .cancel{
+    cursor: pointer;
+}
+
+.sort-content .cancel:hover{
+    color: #d1395a !important;
+}
+
+.sort-container .add-sort{
+    margin: 2px 24px 6px;
+    position: relative;
+}
+
+.sort-container .add-sort button{
+    display: flex;
+    align-items: center;
+    gap: 2px !important;
+}
+
+.sort-container .add-sort i{
+    font-size: 14px !important;
+    color: #A2A0A2 !important;
+}
+
+.sort-container .add-sort span{
+    font-size: 14px !important;
+    color: #A2A0A2 !important;
+}
+
+.sort-container .add-sort button:hover{
+    background-color: #272e37 !important;
+}
+
+.sort-container .add-sort button:hover i{
+    color: #F6F0FC !important;
+}
+
+.sort-container .add-sort button:hover span{
+    color: #F6F0FC !important;
+}
+
+.options-sort{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #0d1117;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 0.1px solid #6c6f72;
+    border-radius: 5px;
+    padding: 5px 0;
+    z-index: 1000;
+    width: 160px;
+}
+
+.options-sort-item{
+    display: flex;
+    align-items: center;
+    padding: 8px 20px;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.options-sort-item:hover{
+    background-color: #272e37;
+}

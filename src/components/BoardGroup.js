@@ -21,7 +21,7 @@ const isManagerOfGroup = (user, group) => {
 };
 
 const BoardGroup = () => {
-    const { group, user, fetchDataGroup, listWG } = useOutletContext();
+    const { group, user, fetchDataGroup, showListWG } = useOutletContext();
     const navigate = useNavigate();
     const [openSubTask, setOpenSubTask] = useState(null);
     const [isWGOpen, setIsWGOpen] = useState(false);
@@ -170,7 +170,7 @@ const BoardGroup = () => {
 
     return (
         <div className={`container-board ${idTask ? 'selected' : ''}`}>
-            {listWG && listWG.map((item, index) =>
+            {showListWG && showListWG.map((item, index) =>
                 <div key={index} className={`board-item-work-group`}>
                     <div className="board-item-work-group-header">
                         <div className="board-title">

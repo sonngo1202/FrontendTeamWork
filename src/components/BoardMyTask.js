@@ -4,7 +4,7 @@ import { useState } from 'react';
 import TaskDetail from './TaskDetail';
 
 const BoardMyTask = () => {
-    const { user, listTask } = useOutletContext();
+    const { user, listTaskShow } = useOutletContext();
     const [selectedItem, setSelectedItem] = useState(null);
     const [isOpenSubTask, setIsOpenSubTask] = useState(false);
 
@@ -74,16 +74,18 @@ const BoardMyTask = () => {
         setSelectedItem(null);
     }
 
+    console.log(listTaskShow)
+
     return (
         <div className='container-board-my-task'>
             {workGroupItems.map((item) =>
                 <div key={item.name} className='board-my-task-item-wg'>
                     <div className='board-my-task-item-wg-header'>
                         <span className='board-my-task-title-name'>{item.name}</span>
-                        <span className='board-my-task-title-count'>{getList(listTask, item.name).length}</span>
+                        <span className='board-my-task-title-count'>{getList(listTaskShow, item.name).length}</span>
                     </div>
-                    <div className={`board-my-task-item-wg-content ${getList(listTask, item.name).length > 0 ? 'list' : 'empty'}`}>
-                        {getList(listTask, item.name).map((itemTask) =>
+                    <div className={`board-my-task-item-wg-content ${getList(listTaskShow, item.name).length > 0 ? 'list' : 'empty'}`}>
+                        {getList(listTaskShow, item.name).map((itemTask) =>
                             <div key={itemTask.id} className={`board-my-task-item-task ${selectedItem?.id === itemTask.id ? 'selected' : ''}`} onClick={(event) => handleOpenTask(itemTask, event)}>
                                 <div className='board-my-task-item-task-title'>
                                     <span className={`board-my-task-task-status ${itemTask.status.id === 1 ? 'status-in-progress' :

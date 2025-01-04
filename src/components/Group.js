@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router
 import Cookies from 'js-cookie';
 import { detail } from '../services/groupService'
 import Filter from "./Filter";
+import Sort from "./Sort";
 
 const isManagerOfGroup = (user, group) => {
     if (!user || !user.roles) {
@@ -39,6 +40,7 @@ const Group = () => {
     const [selectedFilterEnd, setSelectedFilterEnd] = useState(null);
     const [listWG, setListWG] = useState([]);
     const [totalFilter, setTotalFilter] = useState(0);
+    const [criteria, setCriteria] = useState([]);
 
     const groupItems = [
         { name: "Overview", icon: "fas fa-clipboard-list", path: `/group/${groupId}/overview`, isDisplay: true },
@@ -206,6 +208,41 @@ const Group = () => {
         setIsFilterOpen(false);
     }
 
+    const handleClearSort = (e) => {
+        e.stopPropagation();
+        setCriteria([]);
+        setIsSortOpen(false);
+    }
+
+    const [showListWG, setShowListWG] = useState(listWG);
+
+    useEffect(() => {
+        let sortedWorkGroups = listWG;
+        if (criteria.length > 0) {
+            sortedWorkGroups = listWG.map(wg => {
+                const sortedTasks = [...wg.listTask].sort((a, b) => {
+                    for (const criterion of criteria) {
+                        const key = criterion.key;
+                        const order = criterion.order;
+
+                        const aValue = key.split('.').reduce((obj, field) => obj?.[field], a);
+                        const bValue = key.split('.').reduce((obj, field) => obj?.[field], b);
+
+                        if (aValue < bValue) return order === 'asc' ? -1 : 1;
+                        if (aValue > bValue) return order === 'asc' ? 1 : -1;
+                    }
+                    return 0;
+                });
+
+                return {
+                    ...wg,
+                    listTask: sortedTasks,
+                };
+            });
+        }
+        setShowListWG(sortedWorkGroups);
+    }, [criteria, listWG]);
+
     return (
         <div className="container-group">
             <div className="group-header">
@@ -240,11 +277,14 @@ const Group = () => {
                             end={selectedFilterEnd} setEnd={setSelectedFilterEnd}
                             member={group?.listUserGroup} />}
                     </div>
-                    <div key={"sort"} className="group-filter-item" ref={sortRef}>
+                    <div key={"sort"} className={`group-filter-item ${criteria.length > 0 ? 'active' : ''}`} ref={sortRef}>
                         <button onClick={() => { setIsSortOpen(true); setIsFilterOpen(false) }} >
                             <i className={`fas fa-sort`}></i>
                             <span>Sort</span>
+                            {criteria.length > 0 && (<span>{criteria.length}</span>)}
+                            {criteria.length > 0 && (<i className='fas fa-times' onClick={(e) => handleClearSort(e)}></i>)}
                         </button>
+                        {isSortOpen && <Sort criteria={criteria} setCriteria={setCriteria} setClose={setIsSortOpen} />}
                     </div>
                 </div>
             )}
@@ -254,7 +294,7 @@ const Group = () => {
                     <button className={`${typeDashboard === 2 ? 'selected' : ''}`} onClick={() => { setTypeDashboard(2); navigate(`/group/${groupId}/dashboard/by-member`) }}>By Member</button>
                 </div>
             )}
-            <Outlet context={{ group, user, fetchUserData, fetchDataGroup, listWG }} />
+            <Outlet context={{ group, user, fetchUserData, fetchDataGroup, showListWG }} />
         </div>
     );
 };
