@@ -201,7 +201,7 @@ const MyTask = () => {
     }
 
     useEffect(() => {
-        let sortedTasks = [...listTaskFilter]; 
+        let sortedTasks = [...listTaskFilter];
         if (criteria.length > 0) {
             sortedTasks = sortedTasks.sort((a, b) => {
                 for (const criterion of criteria) {
@@ -267,7 +267,7 @@ const MyTask = () => {
                 <button onClick={handleNextWeek}><i className="fas fa-chevron-right"></i></button>
                 <span>{getCurrentMonthYear(currentDate)}</span>
             </div>)}
-            <Outlet context={{ user, listTaskShow, weekDays }} />
+            <Outlet context={{ user, listTaskShow, weekDays, listTask }} />
         </div>
     );
 }

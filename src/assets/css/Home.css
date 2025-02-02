@@ -179,11 +179,17 @@
 }
 
 .project-grid {
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    width: 90%;
+    width: 90%; */
+    display: flex;
+    flex-wrap: wrap; 
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     margin-left: 5%;
+    width: 100%;
+    gap: 15px; 
 }
 
 .project-item {
@@ -195,7 +201,7 @@
     color: #f0f6fc;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    width: 92%;
+    width: 40%;
 }
 
 .project-item img {

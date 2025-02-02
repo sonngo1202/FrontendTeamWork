@@ -46,6 +46,7 @@ const DashboardByMember = () => {
     };
 
     const getChartDataByStatus = (item) => {
+        console.log(item)
         return {
             labels: ['Completed', 'Not Started', 'In Progress'],
             datasets: [

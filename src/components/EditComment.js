@@ -22,7 +22,7 @@ const EditComment = ({ setClose, comment, members, renderSuggestion, idTask, idW
 
             const linkedMention = `@[${mentionText}](${item.user.id})`;
             formattedComment = beforeMention + linkedMention + afterMention;
-            x += 6;
+            x += linkedMention.length - mentionText.length;
         });
         setData(formattedComment);
     }, [])
@@ -44,7 +44,7 @@ const EditComment = ({ setClose, comment, members, renderSuggestion, idTask, idW
         let x = 0;
         while ((match = regex.exec(data)) !== null) {
             let s = match.index - x;
-            x += 6;
+            x += (5 + match[2].length);
             let e = regex.lastIndex - x
             mentions.push({
                 user: { id: match[2] },

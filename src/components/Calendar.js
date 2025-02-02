@@ -24,8 +24,8 @@ const Calendar = () => {
 
     return (
         <div className='container-calendar'>
-            {weekDays && weekDays.map((item) =>
-                <div key={item.id} className='calendar-item'>
+            {weekDays && weekDays.map((item, index) =>
+                <div key={index} className='calendar-item'>
                     <div className='calendar-item-header'>
                         <span className='calendar-item-header-name'>{item.name}</span>
                         <span className={`calendar-item-header-day ${(

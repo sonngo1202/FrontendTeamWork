@@ -174,7 +174,7 @@ const BoardGroup = () => {
                 <div key={index} className={`board-item-work-group`}>
                     <div className="board-item-work-group-header">
                         <div className="board-title">
-                            <span className="board-title-name">{item.name}</span>
+                            <div className="board-title-name"><span>{item.name}</span></div>
                             <span className="board-title-count">{item?.listTask.length}</span>
                         </div>
                         {isManagerOfGroup(user, group) && <div className="board-select" onClick={() => {

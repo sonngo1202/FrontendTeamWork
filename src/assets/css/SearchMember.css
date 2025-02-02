@@ -66,7 +66,7 @@
     font-size: 14px;
     color: #F6F0FC;
     font-weight: 400;
-    width: 100%;
+    width: 100% !important;
 }
 
 .search-member-content-item-info .email {

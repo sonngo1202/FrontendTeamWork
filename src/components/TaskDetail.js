@@ -329,7 +329,7 @@ const TaskDetail = forwardRef(({ user, id, idWG, idG, onClose, fetchDataGroup, g
         let x = 0;
         while ((match = regex.exec(comment)) !== null) {
             let s = match.index - x;
-            x += 6;
+            x += (5 + match[2].length);
             let e = regex.lastIndex - x
             mentions.push({
                 user: { id: match[2] },

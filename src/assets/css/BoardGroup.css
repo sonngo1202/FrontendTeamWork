@@ -35,10 +35,19 @@
     margin-bottom: 8px;
 }
 
+.board-item-work-group-header .board-title{
+    display: flex;
+    align-items: center;
+}
+
 .board-title-name {
     color: #F0F6FC;
     font-size: 18px;
     font-weight: bold;
+    white-space: nowrap;       
+    overflow: hidden;           
+    text-overflow: ellipsis;
+    width: 140px;  
 }
 
 .board-title-count {
